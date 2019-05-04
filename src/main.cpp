@@ -6,6 +6,10 @@
 
 int main ( int argc, char** argv )
 {
-
+  LS();
+  LT();
+  int a = 3;
+  L ( a );
+  LT();
   return 0;
 }
