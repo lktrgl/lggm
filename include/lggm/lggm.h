@@ -11,6 +11,17 @@ namespace lggm
 
 std::string const g_outFileName = "/home/boil/Work/MyTmp/lggm.txt";
 
+enum /*class*/ format : uint8_t
+{
+  none,
+  timestamp = 0b1,
+  file = 0b10,
+  function = 0b100,
+  line = 0b1000,
+};
+
+constexpr uint8_t g_defaultFormat = format::timestamp | format::function | format::line;
+
 class lggm
 {
 public:
@@ -71,6 +82,11 @@ public:
 private:
   std::string printTimestamp()
   {
+    if ( ! ( m_format & format::timestamp ) )
+    {
+      return {};
+    }
+
     auto const start = std::chrono::system_clock::now();
     auto const in_time_t = std::chrono::system_clock::to_time_t ( start );
 
@@ -81,8 +97,23 @@ private:
 
   std::string printDisposition ( size_t lineNo, std::string const& functName )
   {
+    if ( ! ( m_format & ( format::function | format::line ) ) )
+    {
+      return {};
+    }
+
     std::stringstream ss;
-    ss << functName << ":" << lineNo << " ";
+
+    if ( m_format & format::function )
+    {
+      ss << functName;
+    }
+
+    if ( m_format & format::line )
+    {
+      ss << ":" << lineNo << " ";
+    }
+
     return ss.str();
   }
 
@@ -98,6 +129,7 @@ private:
   size_t m_lineNo{};
   std::string m_functName{};
   static constexpr std::string const& m_outFileName = g_outFileName;
+  static constexpr uint8_t m_format = g_defaultFormat;
 };
 
 } // namespace lggm
@@ -108,6 +140,8 @@ private:
 #define LS() lggm::lggm LGGM_CAT(a,__LINE__) ( __LINE__, __PRETTY_FUNCTION__ )
 
 #define LT() do { lggm::lggm LGGM_CAT(a,__LINE__)( __LINE__, __PRETTY_FUNCTION__ , "trace"); } while(0);
+
+#define LM(m) do { lggm::lggm LGGM_CAT(a,__LINE__)( __LINE__, __PRETTY_FUNCTION__ , m ); } while(0);
 
 #define L(v) do { lggm::lggm LGGM_CAT(a,__LINE__)( __LINE__, __PRETTY_FUNCTION__ , #v , v ); } while(0);
 
