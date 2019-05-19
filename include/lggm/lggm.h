@@ -162,7 +162,7 @@ private:
 #define LGGM_CAT(a,b) LGGM_CAT2(a, b)
 #define LGGM_CAT2(a,b) a ## b
 
-#define LS() lggm::lggm().doScope ( __LINE__, __PRETTY_FUNCTION__ )
+#define LS() lggm::lggm LGGM_CAT(a, __LINE__) ; LGGM_CAT(a, __LINE__).doScope ( __LINE__, __PRETTY_FUNCTION__ )
 
 #define LT() lggm::lggm().doMessage ( __LINE__, __PRETTY_FUNCTION__ , "trace")
 
