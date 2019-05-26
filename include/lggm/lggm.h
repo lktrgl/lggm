@@ -26,10 +26,27 @@ constexpr uint8_t g_defaultFormat = static_cast<std::underlying_type<format>::ty
                                     | static_cast<std::underlying_type<format>::type> ( format::function )
                                     | static_cast<std::underlying_type<format>::type> ( format::line );
 
+template<typename LogStream>
 class lggm
 {
+  template<typename LogStream2,
+           typename = std::enable_if_t<std::is_same_v<LogStream2, std::ofstream>>
+           >
+  bool initStream ( LogStream2& stream )
+
+  {
+    m_ofs.open ( m_outFileName, std::ios::out | std::ios::app );
+    return m_ofs.is_open() && m_ofs.good();
+  }
+
 public:
-  lggm () : m_ofs ( m_outFileName, std::ios::out | std::ios::app ) { /* EMPTY */ }
+  lggm ( LogStream& stream ) : m_ofs ( stream )
+  {
+    if ( !initStream ( stream ) )
+    {
+      throw std::runtime_error ( "cannot init std::ofstream member" );
+    }
+  }
 
   void doMessage ( size_t lineNo, std::string const& functName, std::string const& msg )
   {
@@ -150,7 +167,7 @@ private:
 private:
   bool m_isScoped = false;
   bool m_isStreamed = false;
-  std::ofstream m_ofs;
+  LogStream& m_ofs;
   size_t m_lineNo{};
   std::string m_functName{};
   static constexpr uint8_t m_format = g_defaultFormat;
@@ -162,14 +179,14 @@ private:
 #define LGGM_CAT(a,b) LGGM_CAT2(a, b)
 #define LGGM_CAT2(a,b) a ## b
 
-#define LS() lggm::lggm LGGM_CAT(a, __LINE__) ; LGGM_CAT(a, __LINE__).doScope ( __LINE__, __PRETTY_FUNCTION__ )
+#define LS() std::ofstream LGGM_CAT(aA, __LINE__); lggm::lggm LGGM_CAT(a, __LINE__)(LGGM_CAT(aA, __LINE__)) ; LGGM_CAT(a, __LINE__).doScope ( __LINE__, __PRETTY_FUNCTION__ )
 
-#define LT() lggm::lggm().doMessage ( __LINE__, __PRETTY_FUNCTION__ , "trace")
+#define LT() std::ofstream LGGM_CAT(aA, __LINE__); lggm::lggm(LGGM_CAT(aA, __LINE__)).doMessage ( __LINE__, __PRETTY_FUNCTION__ , "trace")
 
-#define LM(m) lggm::lggm().doMessage ( __LINE__, __PRETTY_FUNCTION__ , m )
+#define LM(m) std::ofstream LGGM_CAT(aA, __LINE__); lggm::lggm(LGGM_CAT(aA, __LINE__)).doMessage ( __LINE__, __PRETTY_FUNCTION__ , m )
 
-#define L(v) lggm::lggm().doNameValue ( __LINE__, __PRETTY_FUNCTION__ , #v , v )
+#define L(v) std::ofstream LGGM_CAT(aA, __LINE__); lggm::lggm(LGGM_CAT(aA, __LINE__)).doNameValue ( __LINE__, __PRETTY_FUNCTION__ , #v , v )
 
-#define LSS(v) lggm::lggm().doStream ( __LINE__, __PRETTY_FUNCTION__ ) << v
+#define LSS(v) std::ofstream LGGM_CAT(aA, __LINE__); lggm::lggm(LGGM_CAT(aA, __LINE__)).doStream ( __LINE__, __PRETTY_FUNCTION__ ) << v
 
 

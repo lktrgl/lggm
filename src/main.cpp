@@ -12,7 +12,7 @@ int main ( int argc, char** argv )
   std::cout << __PRETTY_FUNCTION__ << " ->" << std::endl;
 
   {
-    std::ofstream logfile ( lggm::lggm::getOutFileName(), std::ios::out | std::ios::trunc );
+    std::ofstream logfile ( lggm::lggm<std::ofstream>::getOutFileName(), std::ios::out | std::ios::trunc );
     assert ( logfile.is_open() );
   }
 
@@ -31,7 +31,7 @@ int main ( int argc, char** argv )
     std::stringstream filecontents;
 
     {
-      std::ifstream logfile ( lggm::lggm::getOutFileName(), std::ios::in );
+      std::ifstream logfile ( lggm::lggm<std::ofstream>::getOutFileName(), std::ios::in );
       assert ( logfile.is_open() );
 
       do
