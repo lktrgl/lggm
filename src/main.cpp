@@ -6,16 +6,9 @@
 #include <fstream>
 #include <string>
 
-
-int main ( int argc, char** argv )
+void doMacroTest()
 {
-  std::cout << __PRETTY_FUNCTION__ << " ->" << std::endl;
-
-  {
-    std::ofstream logfile ( lggm::lggm::getOutFileName(), std::ios::out | std::ios::trunc );
-    assert ( logfile.is_open() );
-  }
-
+#ifdef LGGM_MACRO_TESTS
   LS();
   LT();
   int a = 3;
@@ -51,6 +44,26 @@ int main ( int argc, char** argv )
 
     std::cout << filecontents.str() <<  std::endl;
   }
+#endif // LGGM_MACRO_TESTS
+}
+
+void doCppClassTest()
+{
+
+  {
+    std::ofstream logfile ( lggm::lggm::getOutFileName(), std::ios::out | std::ios::trunc );
+    assert ( logfile.is_open() );
+  }
+
+}
+
+
+int main ( int argc, char** argv )
+{
+  std::cout << __PRETTY_FUNCTION__ << " ->" << std::endl;
+
+  doCppClassTest();
+  doMacroTest();
 
   std::cout << __PRETTY_FUNCTION__ << " <-" << std::endl;
 
