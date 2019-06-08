@@ -62,42 +62,41 @@ template <typename Stream>
 class lggm
 {
 public:
-  lggm ( Stream& stream ) : m_ofs ( stream )
+  lggm ( Stream& stream, size_t lineNo, std::string const& functName )
+    : m_outputStream ( stream )
+    , m_lineNo ( lineNo )
+    , m_functName ( functName )
   {
-    if ( !details::streamTraits_t<Stream>::initStream ( m_ofs, m_outFileName, std::ios::out | std::ios::app ) )
+    if ( !details::streamTraits_t<Stream>::initStream ( m_outputStream, m_outFileName, std::ios::out | std::ios::app ) )
     {
       throw std::runtime_error ( "cannot init the log stream" );
     }
   }
 
-  void doMessage ( size_t lineNo, std::string const& functName, std::string const& msg )
+  void doMessage ( std::string const& msg )
   {
-    if ( !details::streamTraits_t<Stream>::isStreamReady ( m_ofs ) )
+    if ( !details::streamTraits_t<Stream>::isStreamReady ( m_outputStream ) )
     {
       return;
     }
 
-    m_ofs << printTimestamp() << printDisposition ( lineNo, functName ) << msg << std::endl;
+    doStreamPrefix() << msg << std::endl;
   }
 
   template <typename T>
-  void doNameValue ( size_t lineNo, std::string const& functName, std::string const& name, T value )
+  void doNameValue ( std::string const& name, T value )
   {
-    if ( !details::streamTraits_t<Stream>::isStreamReady ( m_ofs ) )
+    if ( !details::streamTraits_t<Stream>::isStreamReady ( m_outputStream ) )
     {
       return;
     }
 
-    m_ofs << printTimestamp() << printDisposition ( lineNo,
-          functName ) << "\"" << name << "\" = '"  << value  << "'" << std::endl;
+    doStreamPrefix() << "\"" << name << "\" = '"  << value  << "'" << std::endl;
   }
 
-  void doScope ( size_t lineNo, std::string const& functName )
+  void doScope ()
   {
-    m_lineNo = lineNo;
-    m_functName = functName;
-
-    if ( !details::streamTraits_t<Stream>::isStreamReady ( m_ofs ) )
+    if ( !details::streamTraits_t<Stream>::isStreamReady ( m_outputStream ) )
     {
       return;
     }
@@ -105,18 +104,9 @@ public:
     outputScopedMessage ( "->" );
   }
 
-  std::ostream& doStream ( size_t lineNo, std::string const& functName )
-  {
-    m_isStreamed = true;
-
-    m_ofs << printTimestamp() << printDisposition ( lineNo, functName );
-
-    return getOutStream();
-  }
-
   ~lggm()
   {
-    if ( !details::streamTraits_t<Stream>::isStreamReady ( m_ofs ) )
+    if ( !details::streamTraits_t<Stream>::isStreamReady ( m_outputStream ) )
     {
       return;
     }
@@ -136,12 +126,21 @@ public:
     return m_outFileName;
   }
 
+private:
   std::ostream& getOutStream()
   {
-    return m_ofs;
+    return m_outputStream;
   }
 
-private:
+  std::ostream& doStreamPrefix ( )
+  {
+    m_isStreamed = true;
+
+    m_outputStream << printTimestamp() << printDisposition ( m_lineNo, m_functName );
+
+    return getOutStream();
+  }
+
   std::string printTimestamp()
   {
     if ( ! ( m_format & static_cast<std::underlying_type<format>::type> ( format::timestamp ) ) )
@@ -183,13 +182,13 @@ private:
   void outputScopedMessage ( std::string const& msg )
   {
     m_isScoped = true;
-    m_ofs << printTimestamp() << printDisposition ( m_lineNo, m_functName ) << msg << std::endl;
+    doStreamPrefix() << msg << std::endl;
   }
 
 private:
   bool m_isScoped = false;
   bool m_isStreamed = false;
-  Stream& m_ofs;
+  Stream& m_outputStream;
   size_t m_lineNo{};
   std::string m_functName{};
   static constexpr uint8_t m_format = g_defaultFormat;

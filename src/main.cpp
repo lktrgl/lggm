@@ -9,10 +9,8 @@
 
 void doDropLogFile()
 {
-  {
-    std::ofstream logfile ( lggm::lggm<std::ofstream>::getOutFileName(), std::ios::out | std::ios::trunc );
-    assert ( logfile.is_open() );
-  }
+  std::ofstream logfile ( lggm::lggm<std::ofstream>::getOutFileName(), std::ios::out | std::ios::trunc );
+  assert ( logfile.is_open() );
 }
 
 void doCopyLogFileToStdout()
@@ -75,17 +73,17 @@ void doMacroTest()
 void doCppClassTest()
 {
   {
-    lggm::lggm logger ( std::cout );
+    lggm::lggm logger ( std::cout, __LINE__, __PRETTY_FUNCTION__ );
 
-    logger.doScope ( __LINE__, __PRETTY_FUNCTION__ );
-    logger.doMessage ( __LINE__, __PRETTY_FUNCTION__, "Message to stdout" );
+    logger.doScope ();
+    logger.doMessage (  "Message to stdout" );
   }
   {
     std::ofstream ofs;
-    lggm::lggm logger ( ofs );
+    lggm::lggm logger ( ofs, __LINE__, __PRETTY_FUNCTION__ );
 
-    logger.doScope ( __LINE__, __PRETTY_FUNCTION__ );
-    logger.doMessage ( __LINE__, __PRETTY_FUNCTION__, "Message to file" );
+    logger.doScope ();
+    logger.doMessage (  "Message to file" );
   }
 
 }
