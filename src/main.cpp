@@ -5,6 +5,31 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <filesystem>
+
+void doDropLogFile()
+{
+  {
+    std::ofstream logfile ( lggm::lggm<std::ofstream>::getOutFileName(), std::ios::out | std::ios::trunc );
+    assert ( logfile.is_open() );
+  }
+}
+
+void doCopyLogFileToStdout()
+{
+  std::cout << __PRETTY_FUNCTION__ << " ->" << std::endl;
+
+  std::ifstream logfile ( lggm::lggm<std::ofstream>::getOutFileName(), std::ios::in );
+
+  std::string text;
+
+  while ( std::getline ( logfile, text ) )
+  {
+    std::cout << text << std::endl;
+  }
+
+  std::cout << __PRETTY_FUNCTION__ << " <-" << std::endl;
+}
 
 void doMacroTest()
 {
@@ -49,10 +74,18 @@ void doMacroTest()
 
 void doCppClassTest()
 {
-
   {
-    std::ofstream logfile ( lggm::lggm::getOutFileName(), std::ios::out | std::ios::trunc );
-    assert ( logfile.is_open() );
+    lggm::lggm logger ( std::cout );
+
+    logger.doScope ( __LINE__, __PRETTY_FUNCTION__ );
+    logger.doMessage ( __LINE__, __PRETTY_FUNCTION__, "Message to stdout" );
+  }
+  {
+    std::ofstream ofs;
+    lggm::lggm logger ( ofs );
+
+    logger.doScope ( __LINE__, __PRETTY_FUNCTION__ );
+    logger.doMessage ( __LINE__, __PRETTY_FUNCTION__, "Message to file" );
   }
 
 }
@@ -62,8 +95,12 @@ int main ( int argc, char** argv )
 {
   std::cout << __PRETTY_FUNCTION__ << " ->" << std::endl;
 
+  doDropLogFile();
+
   doCppClassTest();
   doMacroTest();
+
+  doCopyLogFileToStdout();
 
   std::cout << __PRETTY_FUNCTION__ << " <-" << std::endl;
 

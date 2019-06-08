@@ -25,15 +25,54 @@ enum class format : uint8_t
 constexpr uint8_t g_defaultFormat = static_cast<std::underlying_type<format>::type> ( format::timestamp )
                                     | static_cast<std::underlying_type<format>::type> ( format::function )
                                     | static_cast<std::underlying_type<format>::type> ( format::line );
+namespace details
+{
+template <typename Stream>
+struct streamTraits_t
+{
+  static bool initStream ( Stream& stream, ... )
+  {
+    static_assert ( std::is_base_of<std::ostream, Stream>::value, "use sort of stream for Stream type" );
+    return stream.good();
+  }
 
+  static bool isStreamReady ( Stream& stream )
+  {
+    return stream.good();
+  }
+};
+
+template <>
+struct streamTraits_t<std::ofstream>
+{
+  static bool initStream ( std::ofstream& stream, std::string const& fileName, std::ios::openmode mode )
+  {
+    stream.open ( fileName, mode ) ;
+    return stream.is_open() && stream.good();
+  }
+
+  static bool isStreamReady ( std::ofstream& stream )
+  {
+    return stream.is_open() && stream.good();
+  }
+};
+} // namespace details
+
+template <typename Stream>
 class lggm
 {
 public:
-  lggm () : m_ofs ( m_outFileName, std::ios::out | std::ios::app ) { /* EMPTY */ }
+  lggm ( Stream& stream ) : m_ofs ( stream )
+  {
+    if ( !details::streamTraits_t<Stream>::initStream ( m_ofs, m_outFileName, std::ios::out | std::ios::app ) )
+    {
+      throw std::runtime_error ( "cannot init the log stream" );
+    }
+  }
 
   void doMessage ( size_t lineNo, std::string const& functName, std::string const& msg )
   {
-    if ( !m_ofs.is_open() )
+    if ( !details::streamTraits_t<Stream>::isStreamReady ( m_ofs ) )
     {
       return;
     }
@@ -42,23 +81,23 @@ public:
   }
 
   template <typename T>
-  void doNameValue ( size_t lineNo, std::string const& functName, std::string const& valueName, T value )
+  void doNameValue ( size_t lineNo, std::string const& functName, std::string const& name, T value )
   {
-    if ( !m_ofs.is_open() )
+    if ( !details::streamTraits_t<Stream>::isStreamReady ( m_ofs ) )
     {
       return;
     }
 
     m_ofs << printTimestamp() << printDisposition ( lineNo,
-          functName ) << "\"" << valueName << "\" = '"  << value  << "'" << std::endl;
+          functName ) << "\"" << name << "\" = '"  << value  << "'" << std::endl;
   }
 
-  void  doScope ( size_t lineNo, std::string const& functName )
+  void doScope ( size_t lineNo, std::string const& functName )
   {
     m_lineNo = lineNo;
     m_functName = functName;
 
-    if ( !m_ofs.is_open() )
+    if ( !details::streamTraits_t<Stream>::isStreamReady ( m_ofs ) )
     {
       return;
     }
@@ -77,13 +116,13 @@ public:
 
   ~lggm()
   {
+    if ( !details::streamTraits_t<Stream>::isStreamReady ( m_ofs ) )
+    {
+      return;
+    }
+
     if ( m_isScoped )
     {
-      if ( !m_ofs.is_open() )
-      {
-        return;
-      }
-
       outputScopedMessage ( "<-" );
     }
     else if ( m_isStreamed )
@@ -150,7 +189,7 @@ private:
 private:
   bool m_isScoped = false;
   bool m_isStreamed = false;
-  std::ofstream m_ofs;
+  Stream& m_ofs;
   size_t m_lineNo{};
   std::string m_functName{};
   static constexpr uint8_t m_format = g_defaultFormat;
