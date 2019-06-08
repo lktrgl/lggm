@@ -3,12 +3,22 @@
 #define LGGM_CAT(a,b) LGGM_CAT2(a, b)
 #define LGGM_CAT2(a,b) a ## b
 
-#define LS() lggm::lggm LGGM_CAT(a, __LINE__) ; LGGM_CAT(a, __LINE__).doScope ( __LINE__, __PRETTY_FUNCTION__ )
+// stream to std::cout
 
-#define LT() lggm::lggm().doMessage ( __LINE__, __PRETTY_FUNCTION__ , "trace")
+#define LGGM_SS() lggm::lggm LGGM_CAT(LGGM_a, __LINE__) ( std::cout, __LINE__, __PRETTY_FUNCTION__ ) ; LGGM_CAT(LGGM_a, __LINE__).doScope ()
 
-#define LM(m) lggm::lggm().doMessage ( __LINE__, __PRETTY_FUNCTION__ , m )
+#define LGGM_TS() lggm::lggm ( std::cout, __LINE__, __PRETTY_FUNCTION__ ).doMessage ("trace")
 
-#define L(v) lggm::lggm().doNameValue ( __LINE__, __PRETTY_FUNCTION__ , #v , v )
+#define LGGM_MS(m) lggm::lggm ( std::cout, __LINE__, __PRETTY_FUNCTION__ ).doMessage ( m )
 
-#define LSS(v) lggm::lggm().doStream ( __LINE__, __PRETTY_FUNCTION__ ) << v
+#define LGGM_PS(v) lggm::lggm ( std::cout, __LINE__, __PRETTY_FUNCTION__ ).doNameValue ( #v , v )
+
+// output to the log file
+
+#define LGGM_SF() std::ofstream LGGM_CAT(LGGM_afs, __LINE__); lggm::lggm LGGM_CAT(LGGM_a, __LINE__) ( LGGM_CAT(LGGM_afs, __LINE__), __LINE__, __PRETTY_FUNCTION__ ) ; LGGM_CAT(LGGM_a, __LINE__).doScope ()
+
+#define LGGM_TF() std::ofstream LGGM_CAT(LGGM_afs, __LINE__); lggm::lggm ( LGGM_CAT(LGGM_afs, __LINE__), __LINE__, __PRETTY_FUNCTION__ ).doMessage ("trace")
+
+#define LGGM_MF(m) std::ofstream LGGM_CAT(LGGM_afs, __LINE__); lggm::lggm ( LGGM_CAT(LGGM_afs, __LINE__), __LINE__, __PRETTY_FUNCTION__ ).doMessage ( m )
+
+#define LGGM_PF(v) std::ofstream LGGM_CAT(LGGM_afs, __LINE__); lggm::lggm ( LGGM_CAT(LGGM_afs, __LINE__), __LINE__, __PRETTY_FUNCTION__ ).doNameValue ( #v , v )
