@@ -57,52 +57,6 @@ struct streamTraits_t<std::ofstream>
     return stream.is_open() && stream.good();
   }
 };
-
-#ifdef __GNUC__
-  #define IS_GNUC true
-#else
-  #define IS_GNUC false
-#endif
-
-#ifdef _MSC_VER
-  #define IS_MSC true
-#else
-  #define IS_MSC false
-#endif
-
-template <typename Stream>
-typename std::enable_if<IS_GNUC, Stream&>::type
-putTimeStamp ( Stream& stream )
-{
-  auto const start = std::chrono::system_clock::now();
-  auto tmm = std::chrono::system_clock::to_time_t ( start );
-  struct tm const* mtm = localtime ( &tmm );
-
-  stream << std::put_time ( mtm, "%Y-%m-%d %X " );
-
-  return stream;
-}
-
-template<typename T1, typename T2>
-void localtime_s ( T1&& mtm, T2&& tmm )
-{
-  localtime_s ( &mtm, &tmm );
-}
-
-template <typename Stream>
-typename std::enable_if<IS_MSC, Stream&>::type
-putTimeStamp ( Stream& stream )
-{
-  auto const start = std::chrono::system_clock::now();
-  auto const tmm = std::chrono::system_clock::to_time_t ( start );
-  struct tm mtm;
-  localtime_s<> ( &mtm, &tmm );
-
-  stream << std::put_time ( &mtm, "%Y-%m-%d %X " );
-
-  return stream;
-}
-
 } // namespace details
 
 template <typename Stream>
@@ -195,7 +149,26 @@ private:
       return m_outputStream;
     }
 
-    return details::putTimeStamp<Stream> ( m_outputStream );
+    auto const start = std::chrono::system_clock::now();
+
+#if defined(__GNUC__)
+    auto const in_time_t = std::chrono::system_clock::to_time_t ( start );
+
+    m_outputStream << std::put_time ( std::localtime ( &in_time_t ), "%Y-%m-%d %H:%M:%S " );
+#elif defined(_MSC_VER)
+    auto const tmm = std::chrono::system_clock::to_time_t ( start );
+
+    struct tm mtm;
+    localtime_s ( &mtm, &tmm );
+
+// TODO: check formating string
+// this edition vs the next line's   m_outputStream << std::put_time ( &mtm, "%Y-%m-%d %X " );
+    m_outputStream << std::put_time ( &mtm, "%Y-%m-%d %H:%M:%S " );
+#else
+#error undefined platform
+#endif
+
+    return m_outputStream;
   }
 
   std::string printDisposition ( size_t lineNo, std::string const& functName )
