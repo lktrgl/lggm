@@ -1,5 +1,7 @@
 #pragma once
 
+#include <iostream>
+
 #define LGGM_CAT(a,b) LGGM_CAT2(a, b)
 #define LGGM_CAT2(a,b) a ## b
 
