@@ -161,8 +161,8 @@ private:
     struct tm mtm;
     localtime_s ( &mtm, &tmm );
 
-// TODO: check formating string
-// this edition vs the next line's   m_outputStream << std::put_time ( &mtm, "%Y-%m-%d %X " );
+    // TODO: check formating string
+    // this edition vs the next line's   m_outputStream << std::put_time ( &mtm, "%Y-%m-%d %X " );
     m_outputStream << std::put_time ( &mtm, "%Y-%m-%d %H:%M:%S " );
 #else
 #error undefined platform
