@@ -84,7 +84,7 @@ public:
     doStreamPrefix() << msg << std::endl;
   }
 
-  template <typename T>
+  template <typename T, std::enable_if_t<not std::is_enum<T>::value, int> = 0>
   void doNameValue ( std::string const& name, T value )
   {
     if ( !details::streamTraits_t<Stream>::isStreamReady ( m_outputStream ) )
@@ -92,7 +92,24 @@ public:
       return;
     }
 
-    doStreamPrefix() << "\"" << name << "\" = '"  << value  << "'" << std::endl;
+    doStreamPrefix() << "\"" << name
+                     << "\" = '"
+                     << value
+                     << "'" << std::endl;
+  }
+
+  template <typename T, std::enable_if_t<std::is_enum<T>::value, int> = 0>
+  void doNameValue ( std::string const& name, T value )
+  {
+    if ( !details::streamTraits_t<Stream>::isStreamReady ( m_outputStream ) )
+    {
+      return;
+    }
+
+    doStreamPrefix() << "\"" << name
+                     << "\" = '"
+                     << static_cast<typename std::underlying_type<T>::type> ( value )
+                     << "'" << std::endl;
   }
 
   void doScope ()
