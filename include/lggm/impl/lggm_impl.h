@@ -68,7 +68,7 @@ public:
     , m_lineNo ( lineNo )
     , m_functName ( functName )
   {
-    if ( !details::streamTraits_t<Stream>::initStream ( m_outputStream, m_outFileName, std::ios::out | std::ios::app ) )
+    if ( !details::streamTraits_t<Stream>::initStream ( getOutStream(), m_outFileName, std::ios::out | std::ios::app ) )
     {
       throw std::runtime_error ( "cannot init the log stream" );
     }
@@ -76,7 +76,7 @@ public:
 
   void doMessage ( std::string const& msg )
   {
-    if ( !details::streamTraits_t<Stream>::isStreamReady ( m_outputStream ) )
+    if ( !details::streamTraits_t<Stream>::isStreamReady ( getOutStream() ) )
     {
       return;
     }
@@ -84,10 +84,32 @@ public:
     doStreamPrefix() << msg << std::endl;
   }
 
+  template <typename T>
+  void doVectorNameValue ( std::string const& name, T const& value )
+  {
+    if ( !details::streamTraits_t<Stream>::isStreamReady ( getOutStream() ) )
+    {
+      return;
+    }
+
+    doStreamPrefix() << "\"" << name << "\" = " << value.size() << " : { ";
+
+    bool isFirst = true;
+
+    for ( auto it = std::begin ( value ); it not_eq std::end ( value ); ++it )
+    {
+      getOutStream()
+          << ( isFirst ? ( isFirst = false, "" ) : ", " )
+          << *it;
+    }
+
+    getOutStream() << " }" << std::endl;
+  }
+
   template <typename T, std::enable_if_t<not std::is_enum<T>::value, int> = 0>
   void doNameValue ( std::string const& name, T value )
   {
-    if ( !details::streamTraits_t<Stream>::isStreamReady ( m_outputStream ) )
+    if ( !details::streamTraits_t<Stream>::isStreamReady ( getOutStream() ) )
     {
       return;
     }
@@ -101,7 +123,7 @@ public:
   template <typename T, std::enable_if_t<std::is_enum<T>::value, int> = 0>
   void doNameValue ( std::string const& name, T value )
   {
-    if ( !details::streamTraits_t<Stream>::isStreamReady ( m_outputStream ) )
+    if ( !details::streamTraits_t<Stream>::isStreamReady ( getOutStream() ) )
     {
       return;
     }
@@ -114,7 +136,7 @@ public:
 
   void doScope ()
   {
-    if ( !details::streamTraits_t<Stream>::isStreamReady ( m_outputStream ) )
+    if ( !details::streamTraits_t<Stream>::isStreamReady ( getOutStream() ) )
     {
       return;
     }
@@ -124,7 +146,7 @@ public:
 
   ~lggm()
   {
-    if ( !details::streamTraits_t<Stream>::isStreamReady ( m_outputStream ) )
+    if ( !details::streamTraits_t<Stream>::isStreamReady ( getOutStream() ) )
     {
       return;
     }
@@ -163,7 +185,7 @@ private:
   {
     if ( ! ( m_format & static_cast<std::underlying_type<format>::type> ( format::timestamp ) ) )
     {
-      return m_outputStream;
+      return getOutStream();
     }
 
     auto const start = std::chrono::system_clock::now();
@@ -171,7 +193,7 @@ private:
 #if defined(__GNUC__)
     auto const in_time_t = std::chrono::system_clock::to_time_t ( start );
 
-    m_outputStream << std::put_time ( std::localtime ( &in_time_t ), "%Y-%m-%d %H:%M:%S " );
+    getOutStream() << std::put_time ( std::localtime ( &in_time_t ), "%Y-%m-%d %H:%M:%S " );
 #elif defined(_MSC_VER)
     auto const tmm = std::chrono::system_clock::to_time_t ( start );
 
@@ -180,12 +202,12 @@ private:
 
     // TODO: check formating string
     // this edition vs the next line's   m_outputStream << std::put_time ( &mtm, "%Y-%m-%d %X " );
-    m_outputStream << std::put_time ( &mtm, "%Y-%m-%d %H:%M:%S " );
+    getOutStream() << std::put_time ( &mtm, "%Y-%m-%d %H:%M:%S " );
 #else
 #error undefined platform
 #endif
 
-    return m_outputStream;
+    return getOutStream();
   }
 
   std::string printDisposition ( size_t lineNo, std::string const& functName )
