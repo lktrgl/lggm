@@ -6,6 +6,7 @@
 #include <fstream>
 #include <string>
 #include <filesystem>
+#include <vector>
 
 void doDropLogFile()
 {
@@ -52,6 +53,12 @@ void doMacroTest()
 
   LGGM_TS();
   LGGM_TF();
+
+  std::vector const v = {1, 2, 3};
+
+  LGGM_VS ( v );
+  LGGM_VF ( v );
+
 }
 
 void doCppClassTest()

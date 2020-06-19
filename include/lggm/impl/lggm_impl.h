@@ -167,7 +167,7 @@ public:
   }
 
 private:
-  std::ostream& getOutStream()
+  Stream& getOutStream()
   {
     return m_outputStream;
   }

@@ -8,10 +8,10 @@ set ( CMAKE_CXX_FLAGS "-Wall -g3 -o0" )
 set ( CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -lstdc++ -lstdc++fs" )
 
 include_directories (
-     ../include
+     include
      )
 
 add_executable ( LggmTest
-     main.cpp
-     ../include/lggm/lggm.h
+     src/main.cpp
+     include/lggm/lggm.h
      )
