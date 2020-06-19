@@ -59,6 +59,20 @@ void doMacroTest()
   LGGM_VS ( v );
   LGGM_VF ( v );
 
+  int x0 = -3;
+  int x1 = 4;
+  int x2 = 7;
+
+  LGGM_RS ( x0, x2, x1 );
+  LGGM_RF ( x0, x2, x1 );
+
+  double dx0 = -3.0;
+  double dx1 = 4.0;
+  double dx2 = 7.0;
+
+  LGGM_RS ( dx0, dx2, dx1 );
+  LGGM_RF ( dx0, dx2, dx1 );
+
 }
 
 void doCppClassTest()

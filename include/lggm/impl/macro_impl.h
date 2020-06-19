@@ -17,6 +17,8 @@
 
 #define LGGM_VS(v) lggm::lggm ( std::cout, __LINE__, __PRETTY_FUNCTION__ ).doVectorNameValue ( #v , v )
 
+#define LGGM_RS(a, b, v) lggm::lggm<decltype(std::cout)>( std::cout, __LINE__, __PRETTY_FUNCTION__ ).doRuler<lggm::g_defaultRullerWidth>( a, b, #v , v )
+
 // output to the log file
 
 #define LGGM_SF() std::ofstream LGGM_CAT(LGGM_afs, __LINE__); lggm::lggm LGGM_CAT(LGGM_a, __LINE__) ( LGGM_CAT(LGGM_afs, __LINE__), __LINE__, __PRETTY_FUNCTION__ ) ; LGGM_CAT(LGGM_a, __LINE__).doScope ()
@@ -28,3 +30,5 @@
 #define LGGM_PF(v) std::ofstream LGGM_CAT(LGGM_afs, __LINE__); lggm::lggm ( LGGM_CAT(LGGM_afs, __LINE__), __LINE__, __PRETTY_FUNCTION__ ).doNameValue ( #v , v )
 
 #define LGGM_VF(v) std::ofstream LGGM_CAT(LGGM_afs, __LINE__); lggm::lggm ( LGGM_CAT(LGGM_afs, __LINE__), __LINE__, __PRETTY_FUNCTION__ ).doVectorNameValue ( #v , v )
+
+#define LGGM_RF(a, b, v) std::ofstream LGGM_CAT(LGGM_afs, __LINE__); lggm::lggm<decltype(std::ofstream)>( LGGM_CAT(LGGM_afs, __LINE__), __LINE__, __PRETTY_FUNCTION__ ).doRuler<lggm::g_defaultRullerWidth>( a, b, #v , v )

@@ -25,6 +25,9 @@ enum class format : uint8_t
 constexpr uint8_t g_defaultFormat = static_cast<std::underlying_type<format>::type> ( format::timestamp )
                                     | static_cast<std::underlying_type<format>::type> ( format::function )
                                     | static_cast<std::underlying_type<format>::type> ( format::line );
+
+constexpr size_t g_defaultRullerWidth = 20;
+
 namespace details
 {
 
@@ -82,6 +85,43 @@ public:
     }
 
     doStreamPrefix() << msg << std::endl;
+  }
+
+  template <size_t PLACEHOLDER_COUNT, typename T>
+  void doRuler ( T const& a, T const& b, std::string const& name, T const& value )
+  {
+    if ( !details::streamTraits_t<Stream>::isStreamReady ( getOutStream() ) )
+    {
+      return;
+    }
+
+    if ( b == a or value > b or value < a )
+    {
+      return;
+    }
+
+    size_t const valuePosition = static_cast<double> ( value - a )
+                                 / static_cast<double> ( b - a )
+                                 * static_cast<double> ( PLACEHOLDER_COUNT );
+
+    doStreamPrefix()
+        << name << ":[";
+
+    for ( size_t i = 0U; i < valuePosition; ++i )
+    {
+      getOutStream() << "-";
+    }
+
+    getOutStream() << "*";
+
+    for ( size_t i = valuePosition; i < PLACEHOLDER_COUNT; ++i )
+    {
+      getOutStream() << "-";
+    }
+
+    getOutStream()
+        << "]:[" << a << ", " << value << ", " << b << "]"
+        << std::endl;
   }
 
   template <typename T>
