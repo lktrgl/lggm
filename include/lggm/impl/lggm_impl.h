@@ -87,25 +87,25 @@ public:
     doStreamPrefix() << msg << std::endl;
   }
 
-  template <size_t PLACEHOLDER_COUNT, typename T>
-  void doRuler ( T const& a, T const& b, std::string const& name, T const& value )
+  template <typename T>
+  bool isRulerPointValid ( T const& a, T const& b, T const& value )
   {
-    if ( !details::streamTraits_t<Stream>::isStreamReady ( getOutStream() ) )
-    {
-      return;
-    }
+    return not ( b == a or value > b or value < a );
+  }
 
-    if ( b == a or value > b or value < a )
-    {
-      return;
-    }
+  template <size_t PLACEHOLDER_COUNT, typename T>
+  size_t getRulerValuePosition ( T const& a, T const& b, T const& value )
+  {
+    return static_cast<double> ( value - a )
+           / static_cast<double> ( b - a )
+           * static_cast<double> ( PLACEHOLDER_COUNT );
+  }
 
-    size_t const valuePosition = static_cast<double> ( value - a )
-                                 / static_cast<double> ( b - a )
-                                 * static_cast<double> ( PLACEHOLDER_COUNT );
-
-    doStreamPrefix()
-        << name << ":[";
+  template <size_t PLACEHOLDER_COUNT, typename T>
+  void doRulerLineValue ( size_t valuePosition )
+  {
+    getOutStream()
+        << "[";
 
     for ( size_t i = 0U; i < valuePosition; ++i )
     {
@@ -114,13 +114,101 @@ public:
 
     getOutStream() << "*";
 
-    for ( size_t i = valuePosition; i < PLACEHOLDER_COUNT; ++i )
+    for ( size_t i = valuePosition + 1; i < PLACEHOLDER_COUNT; ++i )
     {
       getOutStream() << "-";
     }
 
     getOutStream()
-        << "]:[" << a << ", " << value << ", " << b << "]"
+        << "]";
+  }
+
+  template <size_t PLACEHOLDER_COUNT>
+  void doRulerLineNoValue ()
+  {
+    getOutStream()
+        << "[";
+
+    for ( size_t i = 0; i < PLACEHOLDER_COUNT; ++i )
+    {
+      getOutStream() << "-";
+    }
+
+    getOutStream()
+        << "]";
+  }
+
+  template <size_t PLACEHOLDER_COUNT, typename T>
+  void doRuler ( T const& a, T const& b, std::string const& name, T const& value )
+  {
+    if ( !details::streamTraits_t<Stream>::isStreamReady ( getOutStream() ) )
+    {
+      return;
+    }
+
+    if ( not isRulerPointValid<T> ( a, b, value ) )
+    {
+      return;
+    }
+
+    size_t const valuePosition = getRulerValuePosition<PLACEHOLDER_COUNT, T> ( a, b, value );
+
+    doStreamPrefix()
+        << name << ":";
+
+    doRulerLineValue<PLACEHOLDER_COUNT, T> ( valuePosition );
+
+    getOutStream()
+        << ":[" << a << ", " << value << ", " << b << "]"
+        << std::endl;
+  }
+
+  template <size_t PLACEHOLDER_COUNT, typename T>
+  void doPlaneRuler ( T const& a1, T const& b1, T const& a2, T const& b2,
+                      std::string const& name1, T const& value1,
+                      std::string const& name2, T const& value2 )
+  {
+    if ( !details::streamTraits_t<Stream>::isStreamReady ( getOutStream() ) )
+    {
+      return;
+    }
+
+    if ( not isRulerPointValid<T> ( a1, b1, value1 )
+         or
+         not isRulerPointValid<T> ( a2, b2, value2 ) )
+    {
+      return;
+    }
+
+    size_t const valuePosition1 = getRulerValuePosition<PLACEHOLDER_COUNT, T> ( a1, b1, value1 );
+
+    size_t const valuePosition2 = getRulerValuePosition<PLACEHOLDER_COUNT, T> ( a2, b2, value2 );
+
+
+    for ( size_t i = 0U; i < valuePosition2; ++i )
+    {
+      doRulerLineNoValue<PLACEHOLDER_COUNT> ();
+      getOutStream()
+          << std::endl;
+    }
+
+    doRulerLineValue<PLACEHOLDER_COUNT, T> ( valuePosition1 );
+    getOutStream()
+        << std::endl;
+
+
+    for ( size_t i = valuePosition2 + 1; i < PLACEHOLDER_COUNT; ++i )
+    {
+      doRulerLineNoValue<PLACEHOLDER_COUNT> ();
+      getOutStream()
+          << std::endl;
+    }
+
+    getOutStream()
+        << "{ "
+        << name1 << ":[" << a1 << ", " << value1 << ", " << b1 << "], "
+        << name2 << ":[" << a2 << ", " << value2 << ", " << b2 << "] "
+        << "}"
         << std::endl;
   }
 
@@ -170,7 +258,7 @@ public:
 
     doStreamPrefix() << "\"" << name
                      << "\" = '"
-                     << static_cast<typename std::underlying_type<T>::type> ( value )
+                     << static_cast<size_t> ( static_cast<typename std::underlying_type<T>::type> ( value ) )
                      << "'" << std::endl;
   }
 
