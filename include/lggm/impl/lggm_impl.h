@@ -234,6 +234,34 @@ public:
     getOutStream() << " }" << std::endl;
   }
 
+  template <typename ... ARGS, size_t ... Indexes>
+  void doNameValue_tuple ( std::string const& name,
+                           std::tuple<ARGS...> const& value,
+                           std::integer_sequence<size_t, Indexes...> )
+  {
+    if ( !details::streamTraits_t<Stream>::isStreamReady ( getOutStream() ) )
+    {
+      return;
+    }
+
+    doStreamPrefix() << "\"" << name
+                     << "\" = { ";
+
+    bool isFirst = true;
+
+    ( ( getOutStream()
+        << ( isFirst ? ( isFirst = false, "" ) : "; " )
+        << std::get<Indexes> ( value ) ), ... );
+    getOutStream()  << " }" << std::endl;
+  }
+
+  template <typename ... ARGS>
+  void doNameValue ( std::string const& name,
+                     std::tuple<ARGS...> const& value )
+  {
+    doNameValue_tuple<ARGS...> ( name, value, std::make_integer_sequence<size_t, sizeof... ( ARGS ) >() );
+  }
+
   template <typename T, std::enable_if_t<not std::is_enum<T>::value, int> = 0>
   void doNameValue ( std::string const& name, T value )
   {

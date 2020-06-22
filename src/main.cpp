@@ -7,6 +7,7 @@
 #include <string>
 #include <filesystem>
 #include <vector>
+#include <tuple>
 
 void doDropLogFile()
 {
@@ -113,6 +114,11 @@ void doMacroTest()
   LGGM_QS ( da0, da2, db0, db2, da1, db1 );
   LGGM_QF ( da0, da2, db0, db2, da1, db1 );
 
+  std::tuple<int, double, std::string> tv{-4, 3.14, "str"};
+
+  // print an tuple value
+  LGGM_PS ( tv );
+  LGGM_PF ( tv );
 }
 
 void doCppClassTest()
