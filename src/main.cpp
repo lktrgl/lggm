@@ -1,5 +1,8 @@
 #include "lggm/lggm.h"
 
+#define DBGPRN_ENABLED
+#include "lggm/dbgprn.h"
+
 #include <cstdint>
 #include <cassert>
 #include <iostream>
@@ -139,17 +142,40 @@ void doCppClassTest()
 
 }
 
-
-int main ( int argc, char** argv )
+void doCppLggmTest()
 {
-  std::cout << __PRETTY_FUNCTION__ << " ->" << std::endl;
-
   doDropLogFile();
 
   doCppClassTest();
   doMacroTest();
 
   doCopyLogFileToStdout();
+}
+
+void doCLggmTest()
+{
+  LGGM_CALL_IN();
+
+  LGGM_PRINT_MSG ( "before trace" );
+  LGGM_TRACE();
+
+  int a = 7;
+
+  LGGM_PRINT_INT ( a );
+
+  const char* s = "a string";
+
+  LGGM_PRINT_STR ( s );
+
+  LGGM_CALL_OUT();
+}
+
+int main ( int argc, char** argv )
+{
+  std::cout << __PRETTY_FUNCTION__ << " ->" << std::endl;
+
+  doCppLggmTest();
+  doCLggmTest();
 
   std::cout << __PRETTY_FUNCTION__ << " <-" << std::endl;
 

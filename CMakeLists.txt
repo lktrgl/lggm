@@ -14,4 +14,7 @@ include_directories (
 add_executable ( LggmTest
      src/main.cpp
      include/lggm/lggm.h
+     include/lggm/lggm.h
+     include/lggm/dbgprn.h
+     src/lggm/dbgprn.c
      )
