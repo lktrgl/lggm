@@ -6,6 +6,7 @@
 
 void lggmDbg ( const char* function, int line, const char* message )
 {
+#if defined(DBGPRN_ENABLED)
   static const char* s_File = "/var/tmp/dbgprn.log";
   FILE* out = NULL;
 
@@ -22,13 +23,24 @@ void lggmDbg ( const char* function, int line, const char* message )
               message );
     fclose ( out );
   }
+
+#else
+  ( void ) function;
+  ( void ) line;
+  ( void ) message;
+#endif
 }
 
 const char* lggmDbgGetStrInt ( const char* name, int val )
 {
   enum { bufflen = 128};
   static char buff[bufflen];
+#if defined(DBGPRN_ENABLED)
   sprintf ( buff, "%s=%d", name, val );
+#else
+  ( void ) name;
+  ( void ) val;
+#endif
   return buff;
 }
 
@@ -36,7 +48,12 @@ const char* lggmDbgGetStrStr ( const char* name, const char* val )
 {
   enum { bufflen = 1024};
   static char buff[bufflen];
+#if defined(DBGPRN_ENABLED)
   sprintf ( buff, "%s='%s'", name, val );
+#else
+  ( void ) name;
+  ( void ) val;
+#endif
   return buff;
 }
 
