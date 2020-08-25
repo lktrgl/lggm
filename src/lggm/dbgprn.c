@@ -1,5 +1,7 @@
 #include <lggm/dbgprn.h>
 
+#include <lggm/impl/dbgprn_cfg.h>
+
 #include <time.h>
 #include <stdio.h>
 
