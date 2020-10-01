@@ -224,7 +224,7 @@ public:
 
     bool isFirst = true;
 
-    for ( auto it = std::begin ( value ); it not_eq std::end ( value ); ++it )
+    for ( auto it = std::cbegin ( value ); it not_eq std::cend ( value ); ++it )
     {
       getOutStream()
           << ( isFirst ? ( isFirst = false, "" ) : ", " )
@@ -262,8 +262,9 @@ public:
     doNameValue_tuple<ARGS...> ( name, value, std::make_integer_sequence<size_t, sizeof... ( ARGS ) >() );
   }
 
-  template <typename T, std::enable_if_t<not std::is_enum<T>::value, int> = 0>
-  void doNameValue ( std::string const& name, T value )
+  template <typename T>
+  std::enable_if_t<not std::is_enum<T>::value, void>
+  doNameValue ( std::string const& name, T value )
   {
     if ( !details::streamTraits_t<Stream>::isStreamReady ( getOutStream() ) )
     {
@@ -276,8 +277,9 @@ public:
                      << "'" << std::endl;
   }
 
-  template <typename T, std::enable_if_t<std::is_enum<T>::value, int> = 0>
-  void doNameValue ( std::string const& name, T value )
+  template <typename T>
+  std::enable_if_t<std::is_enum<T>::value, void>
+  doNameValue ( std::string const& name, T value )
   {
     if ( !details::streamTraits_t<Stream>::isStreamReady ( getOutStream() ) )
     {
