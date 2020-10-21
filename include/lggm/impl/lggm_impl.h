@@ -86,58 +86,6 @@ public:
 
     doStreamPrefix() << msg << std::endl;
   }
-
-  template <typename T>
-  bool isRulerPointValid ( T const& a, T const& b, T const& value )
-  {
-    return not ( b == a or value > b or value < a );
-  }
-
-  template <size_t PLACEHOLDER_COUNT, typename T>
-  size_t getRulerValuePosition ( T const& a, T const& b, T const& value )
-  {
-    return static_cast<double> ( value - a )
-           / static_cast<double> ( b - a )
-           * static_cast<double> ( PLACEHOLDER_COUNT );
-  }
-
-  template <size_t PLACEHOLDER_COUNT, typename T>
-  void doRulerLineValue ( size_t valuePosition )
-  {
-    getOutStream()
-        << "[";
-
-    for ( size_t i = 0U; i < valuePosition; ++i )
-    {
-      getOutStream() << "-";
-    }
-
-    getOutStream() << "*";
-
-    for ( size_t i = valuePosition + 1; i < PLACEHOLDER_COUNT; ++i )
-    {
-      getOutStream() << "-";
-    }
-
-    getOutStream()
-        << "]";
-  }
-
-  template <size_t PLACEHOLDER_COUNT>
-  void doRulerLineNoValue ()
-  {
-    getOutStream()
-        << "[";
-
-    for ( size_t i = 0; i < PLACEHOLDER_COUNT; ++i )
-    {
-      getOutStream() << "-";
-    }
-
-    getOutStream()
-        << "]";
-  }
-
   template <size_t PLACEHOLDER_COUNT, typename T>
   void doRuler ( T const& a, T const& b, std::string const& name, T const& value )
   {
@@ -234,27 +182,6 @@ public:
     getOutStream() << " }" << std::endl;
   }
 
-  template <typename ... ARGS, size_t ... Indexes>
-  void doNameValue_tuple ( std::string const& name,
-                           std::tuple<ARGS...> const& value,
-                           std::integer_sequence<size_t, Indexes...> )
-  {
-    if ( !details::streamTraits_t<Stream>::isStreamReady ( getOutStream() ) )
-    {
-      return;
-    }
-
-    doStreamPrefix() << "\"" << name
-                     << "\" = { ";
-
-    bool isFirst = true;
-
-    ( ( getOutStream()
-        << ( isFirst ? ( isFirst = false, "" ) : "; " )
-        << std::get<Indexes> ( value ) ), ... );
-    getOutStream()  << " }" << std::endl;
-  }
-
   template <typename ... ARGS>
   void doNameValue ( std::string const& name,
                      std::tuple<ARGS...> const& value )
@@ -325,6 +252,78 @@ public:
   }
 
 private:
+  template <typename ... ARGS, size_t ... Indexes>
+  void doNameValue_tuple ( std::string const& name,
+                           std::tuple<ARGS...> const& value,
+                           std::integer_sequence<size_t, Indexes...> )
+  {
+    if ( !details::streamTraits_t<Stream>::isStreamReady ( getOutStream() ) )
+    {
+      return;
+    }
+
+    doStreamPrefix() << "\"" << name
+                     << "\" = { ";
+
+    bool isFirst = true;
+
+    ( ( getOutStream()
+        << ( isFirst ? ( isFirst = false, "" ) : "; " )
+        << std::get<Indexes> ( value ) ), ... );
+    getOutStream()  << " }" << std::endl;
+  }
+
+  template <typename T>
+  bool isRulerPointValid ( T const& a, T const& b, T const& value )
+  {
+    return not ( b == a or value > b or value < a );
+  }
+
+  template <size_t PLACEHOLDER_COUNT, typename T>
+  size_t getRulerValuePosition ( T const& a, T const& b, T const& value )
+  {
+    return static_cast<double> ( value - a )
+           / static_cast<double> ( b - a )
+           * static_cast<double> ( PLACEHOLDER_COUNT );
+  }
+
+  template <size_t PLACEHOLDER_COUNT, typename T>
+  void doRulerLineValue ( size_t valuePosition )
+  {
+    getOutStream()
+        << "[";
+
+    for ( size_t i = 0U; i < valuePosition; ++i )
+    {
+      getOutStream() << "-";
+    }
+
+    getOutStream() << "*";
+
+    for ( size_t i = valuePosition + 1; i < PLACEHOLDER_COUNT; ++i )
+    {
+      getOutStream() << "-";
+    }
+
+    getOutStream()
+        << "]";
+  }
+
+  template <size_t PLACEHOLDER_COUNT>
+  void doRulerLineNoValue ()
+  {
+    getOutStream()
+        << "[";
+
+    for ( size_t i = 0; i < PLACEHOLDER_COUNT; ++i )
+    {
+      getOutStream() << "-";
+    }
+
+    getOutStream()
+        << "]";
+  }
+
   Stream& getOutStream()
   {
     return m_outputStream;
