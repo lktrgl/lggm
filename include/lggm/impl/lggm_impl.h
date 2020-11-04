@@ -60,6 +60,58 @@ struct streamTraits_t<std::ofstream>
     return stream.is_open() && stream.good();
   }
 };
+
+template < typename CONTAINER >
+class is_iterable
+{
+  template < typename U, typename = decltype ( std::cbegin ( std::declval<std::remove_cv_t<U>>() ) ) >
+  static std::true_type test_cbegin ( std::nullptr_t );
+  template < typename U >
+  static std::false_type test_cbegin ( ... );
+
+  template < typename U, typename = decltype ( std::cend ( std::declval<std::remove_cv_t<U>>() ) ) >
+  static std::true_type test_cend ( std::nullptr_t );
+  template < typename U >
+  static std::false_type test_cend ( ... );
+
+public:
+  static constexpr bool value = decltype ( test_cbegin<CONTAINER> ( nullptr ) ) ::value
+                                && decltype ( test_cend<CONTAINER> ( nullptr ) ) ::value;
+};
+
+
+template < typename CONTAINER >
+constexpr bool is_iterable_v = is_iterable<CONTAINER>::value;
+
+template < typename CONTAINER >
+struct is_basic_string : std::false_type {};
+
+template < template<typename, typename, typename> typename CONTAINER, typename SUBTYPE, typename TRAITS, typename ALLOCATOR>
+class is_basic_string<CONTAINER<SUBTYPE, TRAITS, ALLOCATOR>>
+{
+  using type = std::remove_cv_t<CONTAINER<SUBTYPE, TRAITS, ALLOCATOR>>;
+
+public:
+  static constexpr bool value = std::is_same<std::basic_string<SUBTYPE, TRAITS, ALLOCATOR>, type> ::value;
+};
+
+template < typename CONTAINER >
+constexpr bool is_basic_string_v = is_basic_string<CONTAINER>::value;
+
+template < typename CONTAINER >
+struct is_basic_string_view : std::false_type {};
+
+template < template<typename, typename> typename CONTAINER, typename SUBTYPE, typename TRAITS>
+class is_basic_string_view<CONTAINER<SUBTYPE, TRAITS>>
+{
+  using type = std::remove_cv_t<CONTAINER<SUBTYPE, TRAITS>>;
+
+public:
+  static constexpr bool value = std::is_same<std::basic_string_view<SUBTYPE, TRAITS>, type> ::value;
+};
+
+template < typename CONTAINER >
+constexpr bool is_basic_string_view_v = is_basic_string_view<CONTAINER>::value;
 } // namespace details
 
 template <typename Stream>
