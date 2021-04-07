@@ -168,14 +168,14 @@ void doCLggmTest()
   LGGM_PRINT_STR ( s );
 
   const int n1 = 0x01020304;
-  const char* p1 = (const char*)&n1;
+  const char* p1 = ( const char* ) &n1;
 
-  LGGM_PRINT_HEX ( p1, sizeof(n1) );
+  LGGM_PRINT_HEX ( p1, sizeof ( n1 ) );
 
   const int n2 = 0x04030201;
-  const char* p2 = (const char*)&n2;
+  const char* p2 = ( const char* ) &n2;
 
-  LGGM_PRINT_HEX ( p2, sizeof(n2) );
+  LGGM_PRINT_HEX ( p2, sizeof ( n2 ) );
 
   LGGM_CALL_OUT();
 }
