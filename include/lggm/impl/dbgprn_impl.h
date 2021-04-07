@@ -12,6 +12,8 @@ const char* lggmDbgGetStrInt ( const char* name, int val );
 
 const char* lggmDbgGetStrStr ( const char* name, const char* val );
 
+const char* lggmDbgGetHexStr ( const char* name, const char* ptr, int len );
+
 #ifdef __cplusplus
 } /* extern "C" */
 #endif

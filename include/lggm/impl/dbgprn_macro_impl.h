@@ -21,6 +21,9 @@
   #define LGGM_PRINT_STR(var) do{ lggmDbg(__FUNCTION__, __LINE__, lggmDbgGetStrStr(#var, var)); }while(0);
   #define LGGM_PRINT_STR_C(on,var) do{ if(on){lggmDbg(__FUNCTION__, __LINE__, lggmDbgGetStrStr(#var, var));} }while(0);
 
+  #define LGGM_PRINT_HEX(ptr,len) do{ lggmDbg(__FUNCTION__, __LINE__, lggmDbgGetHexStr(#ptr, ptr,len)); }while(0);
+  #define LGGM_PRINT_HEX_C(on,ptr,len) do{ if(on){lggmDbg(__FUNCTION__, __LINE__, lggmDbgGetHexStr(#ptr, ptr,len));} }while(0);
+
 #else
 
   #define LGGM_TRACE()
@@ -35,6 +38,8 @@
   #define LGGM_PRINT_INT_C(on,var)
   #define LGGM_PRINT_STR(var)
   #define LGGM_PRINT_STR_C(on,var)
+  #define LGGM_PRINT_HEX(ptr,len)
+  #define LGGM_PRINT_HEX_C(on,ptr,len)
 
 #endif
 
