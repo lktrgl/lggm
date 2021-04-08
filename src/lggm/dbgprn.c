@@ -5,7 +5,9 @@
 #include <time.h>
 #include <stdio.h>
 
-
+#ifdef DBGPRN_HEADER_BASED_ENABLED
+  static
+#endif
 void lggmDbg ( const char* function, int line, const char* message )
 {
 #if defined(DBGPRN_ENABLED)
@@ -33,6 +35,9 @@ void lggmDbg ( const char* function, int line, const char* message )
 #endif
 }
 
+#ifdef DBGPRN_HEADER_BASED_ENABLED
+  static
+#endif
 const char* lggmDbgGetStrInt ( const char* name, int val )
 {
   enum { bufflen = 128};
@@ -46,6 +51,9 @@ const char* lggmDbgGetStrInt ( const char* name, int val )
   return buff;
 }
 
+#ifdef DBGPRN_HEADER_BASED_ENABLED
+  static
+#endif
 const char* lggmDbgGetStrStr ( const char* name, const char* val )
 {
   enum { bufflen = 1024};
@@ -59,6 +67,9 @@ const char* lggmDbgGetStrStr ( const char* name, const char* val )
   return buff;
 }
 
+#ifdef DBGPRN_HEADER_BASED_ENABLED
+  static
+#endif
 const char* lggmDbgGetHexStr ( const char* name, const char* ptr, int len )
 {
   enum { bufflen = 1024};
