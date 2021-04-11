@@ -25,8 +25,8 @@ git clone --recurse-submodules --verbose --remote --progress https://github.com/
     && cmake .. \
     && make all
 
+git config user.name "lktrgl"
 git config user.email "32882989+lktrgl@users.noreply.github.com"
-
 rm -vf "${script_file}"
 
 unset script_file
