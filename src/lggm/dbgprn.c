@@ -10,7 +10,7 @@
 #endif
 void lggmDbg ( const char* function, int line, const char* message )
 {
-#if defined(DBGPRN_ENABLED)
+#ifdef DBGPRN_ENABLED
   static const char* s_File = "/var/tmp/dbgprn.log";
   FILE* out = NULL;
 
@@ -28,11 +28,11 @@ void lggmDbg ( const char* function, int line, const char* message )
     fclose ( out );
   }
 
-#else
+#else /*DBGPRN_ENABLED*/
   ( void ) function;
   ( void ) line;
   ( void ) message;
-#endif
+#endif /*DBGPRN_ENABLED*/
 }
 
 #ifdef DBGPRN_HEADER_BASED_ENABLED
@@ -42,12 +42,12 @@ const char* lggmDbgGetStrInt ( const char* name, int val )
 {
   enum { bufflen = 128};
   static char buff[bufflen];
-#if defined(DBGPRN_ENABLED)
+#ifdef DBGPRN_ENABLED
   sprintf ( buff, "%s=%d", name, val );
-#else
+#else /*DBGPRN_ENABLED*/
   ( void ) name;
   ( void ) val;
-#endif
+#endif /*DBGPRN_ENABLED*/
   return buff;
 }
 
@@ -58,12 +58,12 @@ const char* lggmDbgGetStrStr ( const char* name, const char* val )
 {
   enum { bufflen = 1024};
   static char buff[bufflen];
-#if defined(DBGPRN_ENABLED)
+#ifdef DBGPRN_ENABLED
   sprintf ( buff, "%s='%s'", name, val );
-#else
+#else /*DBGPRN_ENABLED*/
   ( void ) name;
   ( void ) val;
-#endif
+#endif /*DBGPRN_ENABLED*/
   return buff;
 }
 
@@ -74,7 +74,7 @@ const char* lggmDbgGetHexStr ( const char* name, const char* ptr, int len )
 {
   enum { bufflen = 1024};
   static char buff[bufflen];
-#if defined(DBGPRN_ENABLED)
+#ifdef DBGPRN_ENABLED
   int first_byte = 1;
   size_t buff_len = 0;
   buff_len += sprintf ( &buff[buff_len], "%s='", name );
@@ -87,10 +87,25 @@ const char* lggmDbgGetHexStr ( const char* name, const char* ptr, int len )
 
   buff_len += sprintf ( &buff[buff_len], "'" );
 
-#else
+#else /*DBGPRN_ENABLED*/
   ( void ) name;
   ( void ) ptr;
   ( void ) len;
-#endif
+#endif /*DBGPRN_ENABLED*/
   return buff;
 }
+
+
+#ifdef DBGPRN_HEADER_BASED_ENABLED
+
+#define LGGM_DECORATOR(fn) fn ## __FILE__ ## __LINENO__
+
+void LGGM_DECORATOR ( lggmDbgDummyReferencer ) ()
+{
+  ( void ) lggmDbgGetStrStr;
+  ( void ) lggmDbgGetHexStr;
+}
+
+#undef LGGM_DECORATOR
+
+#endif /*DBGPRN_HEADER_BASED_ENABLED*/
