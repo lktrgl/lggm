@@ -15,14 +15,14 @@
   #define LGGM_PRINT_MSG(txt) do{ lggmDbg(__FUNCTION__, __LINE__, txt); }while(0);
   #define LGGM_PRINT_MSG_C(on,txt) do{ if(on){lggmDbg(__FUNCTION__, __LINE__, txt);} }while(0);
 
-  #define LGGM_PRINT_INT(var) do{ lggmDbg(__FUNCTION__, __LINE__, lggmDbgGetStrInt(#var, var)); }while(0);
-  #define LGGM_PRINT_INT_C(on,var) do{ if(on){lggmDbg(__FUNCTION__, __LINE__, lggmDbgGetStrInt(#var, var));} }while(0);
+  #define LGGM_PRINT_INT(var) do{ enum{buff_len=1024};char buff[buff_len];lggmDbg(__FUNCTION__, __LINE__, lggmDbgGetStrInt(#var, var,buff)); }while(0);
+  #define LGGM_PRINT_INT_C(on,var) do{ if(on){enum{buff_len=1024};char buff[buff_len];lggmDbg(__FUNCTION__, __LINE__, lggmDbgGetStrInt(#var, var,buff));} }while(0);
 
-  #define LGGM_PRINT_STR(var) do{ lggmDbg(__FUNCTION__, __LINE__, lggmDbgGetStrStr(#var, var)); }while(0);
-  #define LGGM_PRINT_STR_C(on,var) do{ if(on){lggmDbg(__FUNCTION__, __LINE__, lggmDbgGetStrStr(#var, var));} }while(0);
+  #define LGGM_PRINT_STR(var) do{ enum{buff_len=1024};char buff[buff_len];lggmDbg(__FUNCTION__, __LINE__, lggmDbgGetStrStr(#var, var,buff)); }while(0);
+  #define LGGM_PRINT_STR_C(on,var) do{ if(on){enum{buff_len=1024};char buff[buff_len];lggmDbg(__FUNCTION__, __LINE__, lggmDbgGetStrStr(#var, var,buff));} }while(0);
 
-  #define LGGM_PRINT_HEX(ptr,len) do{ lggmDbg(__FUNCTION__, __LINE__, lggmDbgGetHexStr(#ptr, ((const char*)(ptr)), len)); }while(0);
-  #define LGGM_PRINT_HEX_C(on,ptr,len) do{ if(on){lggmDbg(__FUNCTION__, __LINE__, lggmDbgGetHexStr(#ptr, ((const char*)(ptr)), len));} }while(0);
+  #define LGGM_PRINT_HEX(ptr,len) do{ enum{buff_len=1024};char buff[buff_len];lggmDbg(__FUNCTION__, __LINE__, lggmDbgGetHexStr(#ptr, ((const char*)(ptr)), len,buff)); }while(0);
+  #define LGGM_PRINT_HEX_C(on,ptr,len) do{ if(on){enum{buff_len=1024};char buff[buff_len];lggmDbg(__FUNCTION__, __LINE__, lggmDbgGetHexStr(#ptr, ((const char*)(ptr)), len,buff));} }while(0);
 
 #else
 

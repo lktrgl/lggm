@@ -1,3 +1,6 @@
+#ifndef DBGPRN_C_INCLUDED
+#define DBGPRN_C_INCLUDED
+
 #include <lggm/dbgprn.h>
 
 #include <lggm/impl/dbgprn_cfg.h>
@@ -6,12 +9,12 @@
 #include <stdio.h>
 
 #ifdef DBGPRN_HEADER_BASED_ENABLED
-  static
+  inline
 #endif
 void lggmDbg ( const char* function, int line, const char* message )
 {
 #ifdef DBGPRN_ENABLED
-  static const char* s_File = "/var/tmp/dbgprn.log";
+  const char* s_File = "/var/tmp/dbgprn.log";
   FILE* out = NULL;
 
   if ( ( out = fopen ( s_File, "at" ) ) )
@@ -36,12 +39,10 @@ void lggmDbg ( const char* function, int line, const char* message )
 }
 
 #ifdef DBGPRN_HEADER_BASED_ENABLED
-  static
+  inline
 #endif
-const char* lggmDbgGetStrInt ( const char* name, int val )
+const char* lggmDbgGetStrInt ( const char* name, int val, char* buff )
 {
-  enum { bufflen = 128};
-  static char buff[bufflen];
 #ifdef DBGPRN_ENABLED
   sprintf ( buff, "%s=%d", name, val );
 #else /*DBGPRN_ENABLED*/
@@ -52,12 +53,10 @@ const char* lggmDbgGetStrInt ( const char* name, int val )
 }
 
 #ifdef DBGPRN_HEADER_BASED_ENABLED
-  static
+  inline
 #endif
-const char* lggmDbgGetStrStr ( const char* name, const char* val )
+const char* lggmDbgGetStrStr ( const char* name, const char* val, char* buff )
 {
-  enum { bufflen = 1024};
-  static char buff[bufflen];
 #ifdef DBGPRN_ENABLED
   sprintf ( buff, "%s='%s'", name, val );
 #else /*DBGPRN_ENABLED*/
@@ -68,12 +67,10 @@ const char* lggmDbgGetStrStr ( const char* name, const char* val )
 }
 
 #ifdef DBGPRN_HEADER_BASED_ENABLED
-  static
+  inline
 #endif
-const char* lggmDbgGetHexStr ( const char* name, const char* ptr, int len )
+const char* lggmDbgGetHexStr ( const char* name, const char* ptr, int len, char* buff )
 {
-  enum { bufflen = 1024};
-  static char buff[bufflen];
 #ifdef DBGPRN_ENABLED
   int first_byte = 1;
   size_t buff_len = 0;
@@ -95,17 +92,4 @@ const char* lggmDbgGetHexStr ( const char* name, const char* ptr, int len )
   return buff;
 }
 
-
-#ifdef DBGPRN_HEADER_BASED_ENABLED
-
-#define LGGM_DECORATOR(fn) fn ## __FILE__ ## __LINENO__
-
-void LGGM_DECORATOR ( lggmDbgDummyReferencer ) ()
-{
-  ( void ) lggmDbgGetStrStr;
-  ( void ) lggmDbgGetHexStr;
-}
-
-#undef LGGM_DECORATOR
-
-#endif /*DBGPRN_HEADER_BASED_ENABLED*/
+#endif /* DBGPRN_C_INCLUDED */
