@@ -16,7 +16,7 @@ EOF_SCRIPT_FILE
 
 chmod a+x "${script_file}"
 
-git clone --recurse-submodules --verbose --remote --progress https://github.com/lktrgl/lggm.git \
+git clone --recurse-submodules --verbose --remote --progress git@github.com:lktrgl/lggm.git \
     && cd lggm \
     && git submodule foreach --recursive git status \
     && git submodule foreach --recursive "${script_file}" \
