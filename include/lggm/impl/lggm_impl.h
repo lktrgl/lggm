@@ -241,6 +241,37 @@ public:
     doNameValue_tuple<ARGS...> ( name, value, std::make_integer_sequence<size_t, sizeof... ( ARGS ) >() );
   }
 
+#ifdef QSTRING_H
+  template <typename T>
+  std::enable_if_t<not std::is_enum<T>::value and std::is_same<QString, T>::value, void>
+  doNameValue ( std::string const& name, T value )
+  {
+    if ( !details::streamTraits_t<Stream>::isStreamReady ( getOutStream() ) )
+    {
+      return;
+    }
+
+    doStreamPrefix() << "\"" << name
+                     << "\" = '"
+                     << value.toStdString()
+                     << "'" << std::endl;
+  }
+
+  template <typename T>
+  std::enable_if_t<not std::is_enum<T>::value and not std::is_same<QString, T>::value, void>
+  doNameValue ( std::string const& name, T value )
+  {
+    if ( !details::streamTraits_t<Stream>::isStreamReady ( getOutStream() ) )
+    {
+      return;
+    }
+
+    doStreamPrefix() << "\"" << name
+                     << "\" = '"
+                     << value
+                     << "'" << std::endl;
+  }
+#else
   template <typename T>
   std::enable_if_t<not std::is_enum<T>::value, void>
   doNameValue ( std::string const& name, T value )
@@ -255,6 +286,7 @@ public:
                      << value
                      << "'" << std::endl;
   }
+#endif // ifdef QSTRING_H
 
   template <typename T>
   std::enable_if_t<std::is_enum<T>::value, void>
