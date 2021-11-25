@@ -453,7 +453,7 @@ private:
 
   std::string printDisposition ( size_t lineNo, std::string const& functName )
   {
-    if ( ! ( m_format & ( static_cast<std::underlying_type<format>::type> ( format::function )
+    if constexpr ( ! ( m_format & ( static_cast<std::underlying_type<format>::type> ( format::function )
                           | static_cast<std::underlying_type<format>::type> ( format::line ) ) ) )
     {
       return {};
@@ -461,12 +461,12 @@ private:
 
     std::stringstream ss;
 
-    if ( m_format & static_cast<std::underlying_type<format>::type> ( format::function ) )
+    if constexpr ( m_format & static_cast<std::underlying_type<format>::type> ( format::function ) )
     {
       ss << functName;
     }
 
-    if ( m_format & static_cast<std::underlying_type<format>::type> ( format::line ) )
+    if constexpr ( m_format & static_cast<std::underlying_type<format>::type> ( format::line ) )
     {
       ss << ":" << lineNo << " ";
     }

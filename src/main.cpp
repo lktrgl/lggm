@@ -1,3 +1,4 @@
+#define LGGM_ENABLE_LOGGER
 #include "lggm/lggm.h"
 
 #define DBGPRN_ENABLED
