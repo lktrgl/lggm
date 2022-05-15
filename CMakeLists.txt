@@ -6,9 +6,9 @@ get_directory_property(IS_SUBPROJECT PARENT_DIRECTORY)
 
 if(NOT IS_SUBPROJECT)
     set ( CMAKE_C_STANDARD 99 )
-    set ( CMAKE_CXX_STANDARD 17 )
-    set ( CMAKE_C_FLAGS "-Wall -g3 -o0" )
-    set ( CMAKE_CXX_FLAGS "-Wall -g3 -o0" )
+    set ( CMAKE_CXX_STANDARD 20 )
+    set ( CMAKE_C_FLAGS "-Wall -g3 -O0" )
+    set ( CMAKE_CXX_FLAGS "-Wall -g3 -O0" )
     set ( CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -lstdc++ -lstdc++fs" )
 else()
 	set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DNDEBUG" )
@@ -24,6 +24,11 @@ add_library ( lggm
      include/lggm/lggm.h
      include/lggm/dbgprn.h
      src/lggm/dbgprn.c
+     )
+
+set_target_properties( lggm
+     PROPERTIES
+          LINKER_LANGUAGE CXX
      )
 
 if(NOT IS_SUBPROJECT)
