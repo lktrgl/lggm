@@ -9,7 +9,7 @@
 #include <stdio.h>
 
 #ifdef DBGPRN_HEADER_BASED_ENABLED
-  inline
+  static inline
 #endif
 void lggmDbg ( const char* function, int line, const char* message )
 {
@@ -39,7 +39,7 @@ void lggmDbg ( const char* function, int line, const char* message )
 }
 
 #ifdef DBGPRN_HEADER_BASED_ENABLED
-  inline
+  static inline
 #endif
 const char* lggmDbgGetStrInt ( const char* name, int val, char* buff )
 {
@@ -53,7 +53,7 @@ const char* lggmDbgGetStrInt ( const char* name, int val, char* buff )
 }
 
 #ifdef DBGPRN_HEADER_BASED_ENABLED
-  inline
+  static inline
 #endif
 const char* lggmDbgGetStrStr ( const char* name, const char* val, char* buff )
 {
@@ -67,7 +67,7 @@ const char* lggmDbgGetStrStr ( const char* name, const char* val, char* buff )
 }
 
 #ifdef DBGPRN_HEADER_BASED_ENABLED
-  inline
+  static inline
 #endif
 const char* lggmDbgGetHexStr ( const char* name, const char* ptr, int len, char* buff )
 {
