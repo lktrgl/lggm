@@ -41,6 +41,32 @@ void lggmDbg ( const char* function, int line, const char* message )
 #ifdef DBGPRN_HEADER_BASED_ENABLED
   static inline
 #endif
+void lggmDbgStdout ( const char* function, int line, const char* message )
+{
+#ifdef DBGPRN_ENABLED
+
+  {
+    char timeStamptBuff[64];
+    time_t result = time ( NULL );
+    struct tm* locTime = localtime ( &result );
+    strftime ( timeStamptBuff, sizeof timeStamptBuff, "%Y-%m-%d %H:%M:%S", locTime );
+    printf ( "%s %s:%d %s\n",
+             timeStamptBuff,
+             function,
+             line,
+             message );
+  }
+
+#else /*DBGPRN_ENABLED*/
+  ( void ) function;
+  ( void ) line;
+  ( void ) message;
+#endif /*DBGPRN_ENABLED*/
+}
+
+#ifdef DBGPRN_HEADER_BASED_ENABLED
+  static inline
+#endif
 const char* lggmDbgGetStrInt ( const char* name, int val, char* buff )
 {
 #ifdef DBGPRN_ENABLED

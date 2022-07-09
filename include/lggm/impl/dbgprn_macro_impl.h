@@ -3,26 +3,32 @@
 
 #if defined(DBGPRN_ENABLED)
 
-  #define LGGM_TRACE() do{ lggmDbg(__FUNCTION__, __LINE__, "trace"); }while(0);
-  #define LGGM_TRACE_C(on) do{ if(on){lggmDbg(__FUNCTION__, __LINE__, "trace");} }while(0);
+  #if defined(DBGPRN_TO_STDOUT)
+    #define DBGPRN_ENGINE lggmDbgStdout
+  #else
+    #define DBGPRN_ENGINE lggmDbg
+  #endif
 
-  #define LGGM_CALL_IN() do{ lggmDbg(__FUNCTION__, __LINE__, "->"); }while(0);
-  #define LGGM_CALL_IN_C(on) do{ if(on){lggmDbg(__FUNCTION__, __LINE__, "->");} }while(0);
+  #define LGGM_TRACE() do{ DBGPRN_ENGINE(__FUNCTION__, __LINE__, "trace"); }while(0);
+  #define LGGM_TRACE_C(on) do{ if(on){DBGPRN_ENGINE(__FUNCTION__, __LINE__, "trace");} }while(0);
 
-  #define LGGM_CALL_OUT() do{ lggmDbg(__FUNCTION__, __LINE__, "<-"); }while(0);
-  #define LGGM_CALL_OUT_C(on) do{ if(on){lggmDbg(__FUNCTION__, __LINE__, "<-");} }while(0);
+  #define LGGM_CALL_IN() do{ DBGPRN_ENGINE(__FUNCTION__, __LINE__, "->"); }while(0);
+  #define LGGM_CALL_IN_C(on) do{ if(on){DBGPRN_ENGINE(__FUNCTION__, __LINE__, "->");} }while(0);
 
-  #define LGGM_PRINT_MSG(txt) do{ lggmDbg(__FUNCTION__, __LINE__, txt); }while(0);
-  #define LGGM_PRINT_MSG_C(on,txt) do{ if(on){lggmDbg(__FUNCTION__, __LINE__, txt);} }while(0);
+  #define LGGM_CALL_OUT() do{ DBGPRN_ENGINE(__FUNCTION__, __LINE__, "<-"); }while(0);
+  #define LGGM_CALL_OUT_C(on) do{ if(on){DBGPRN_ENGINE(__FUNCTION__, __LINE__, "<-");} }while(0);
 
-  #define LGGM_PRINT_INT(var) do{ enum{buff_len=1024};char buff[buff_len];lggmDbg(__FUNCTION__, __LINE__, lggmDbgGetStrInt(#var, var,buff)); }while(0);
-  #define LGGM_PRINT_INT_C(on,var) do{ if(on){enum{buff_len=1024};char buff[buff_len];lggmDbg(__FUNCTION__, __LINE__, lggmDbgGetStrInt(#var, var,buff));} }while(0);
+  #define LGGM_PRINT_MSG(txt) do{ DBGPRN_ENGINE(__FUNCTION__, __LINE__, txt); }while(0);
+  #define LGGM_PRINT_MSG_C(on,txt) do{ if(on){DBGPRN_ENGINE(__FUNCTION__, __LINE__, txt);} }while(0);
 
-  #define LGGM_PRINT_STR(var) do{ enum{buff_len=1024};char buff[buff_len];lggmDbg(__FUNCTION__, __LINE__, lggmDbgGetStrStr(#var, var,buff)); }while(0);
-  #define LGGM_PRINT_STR_C(on,var) do{ if(on){enum{buff_len=1024};char buff[buff_len];lggmDbg(__FUNCTION__, __LINE__, lggmDbgGetStrStr(#var, var,buff));} }while(0);
+  #define LGGM_PRINT_INT(var) do{ enum{buff_len=1024};char buff[buff_len];DBGPRN_ENGINE(__FUNCTION__, __LINE__, lggmDbgGetStrInt(#var, var,buff)); }while(0);
+  #define LGGM_PRINT_INT_C(on,var) do{ if(on){enum{buff_len=1024};char buff[buff_len];DBGPRN_ENGINE(__FUNCTION__, __LINE__, lggmDbgGetStrInt(#var, var,buff));} }while(0);
 
-  #define LGGM_PRINT_HEX(ptr,len) do{ enum{buff_len=1024};char buff[buff_len];lggmDbg(__FUNCTION__, __LINE__, lggmDbgGetHexStr(#ptr, ((const char*)(ptr)), len,buff)); }while(0);
-  #define LGGM_PRINT_HEX_C(on,ptr,len) do{ if(on){enum{buff_len=1024};char buff[buff_len];lggmDbg(__FUNCTION__, __LINE__, lggmDbgGetHexStr(#ptr, ((const char*)(ptr)), len,buff));} }while(0);
+  #define LGGM_PRINT_STR(var) do{ enum{buff_len=1024};char buff[buff_len];DBGPRN_ENGINE(__FUNCTION__, __LINE__, lggmDbgGetStrStr(#var, var,buff)); }while(0);
+  #define LGGM_PRINT_STR_C(on,var) do{ if(on){enum{buff_len=1024};char buff[buff_len];DBGPRN_ENGINE(__FUNCTION__, __LINE__, lggmDbgGetStrStr(#var, var,buff));} }while(0);
+
+  #define LGGM_PRINT_HEX(ptr,len) do{ enum{buff_len=1024};char buff[buff_len];DBGPRN_ENGINE(__FUNCTION__, __LINE__, lggmDbgGetHexStr(#ptr, ((const char*)(ptr)), len,buff)); }while(0);
+  #define LGGM_PRINT_HEX_C(on,ptr,len) do{ if(on){enum{buff_len=1024};char buff[buff_len];DBGPRN_ENGINE(__FUNCTION__, __LINE__, lggmDbgGetHexStr(#ptr, ((const char*)(ptr)), len,buff));} }while(0);
 
 #else
 
