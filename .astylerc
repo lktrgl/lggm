@@ -1,5 +1,7 @@
 --style=allman
 --indent=spaces
+--indent=spaces=2
+--convert-tabs
 --indent-preproc-block
 --indent-preproc-define
 --indent-col1-comments
