@@ -6,6 +6,7 @@
 #include <string>
 #include <chrono>
 #include <iomanip>
+#include <tuple>
 #include <type_traits>
 
 namespace lggm
