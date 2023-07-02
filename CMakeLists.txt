@@ -5,15 +5,27 @@ project ( Lggm )
 get_directory_property(IS_SUBPROJECT PARENT_DIRECTORY)
 
 if(NOT IS_SUBPROJECT)
+
+    message(STATUS "this is not IS_SUBPROJECT")
+
     set ( CMAKE_C_STANDARD 99 )
     set ( CMAKE_CXX_STANDARD 20 )
     set ( CMAKE_C_FLAGS "-Wall -g3 -O0" )
     set ( CMAKE_CXX_FLAGS "-Wall -g3 -O0" )
     set ( CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -lstdc++ -lstdc++fs" )
+
 else()
+
+	message(STATUS "this is IS_SUBPROJECT")
+
 	set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DNDEBUG" )
 	set ( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DNDEBUG" )
 endif()
+
+    message(STATUS "CMAKE_C_STANDARD=[${CMAKE_C_STANDARD}]")
+    message(STATUS "CMAKE_CXX_STANDARD=[${CMAKE_CXX_STANDARD}]")
+    message(STATUS "CMAKE_C_FLAGS=[${CMAKE_C_FLAGS}]")
+    message(STATUS "CMAKE_EXE_LINKER_FLAGS=[${CMAKE_EXE_LINKER_FLAGS}]")
 
 include_directories (
      include
