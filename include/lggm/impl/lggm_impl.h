@@ -32,6 +32,9 @@ constexpr size_t g_defaultRullerWidth = 20;
 namespace details
 {
 
+// Note: this include has been plached here to make the version information falling under the 'details' namespace scope
+#include <lggm/versions/version_info.h>
+
 template <typename Stream>
 struct streamTraits_t
 {
@@ -334,6 +337,14 @@ public:
   static std::string const& getOutFileName()
   {
     return m_outFileName;
+  }
+
+  static std::string_view getVersion()
+  {
+    return std::string_view (
+             reinterpret_cast<const char*> ( details::gen::code_template::version_info_txt ),
+             details::gen::code_template::version_info_txt_len
+           );
   }
 
 private:

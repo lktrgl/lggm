@@ -5,8 +5,11 @@
 
 #include <lggm/impl/dbgprn_cfg.h>
 
+#include <lggm/versions/version_info.h>
+
 #include <time.h>
 #include <stdio.h>
+#include <string.h>
 
 #ifdef DBGPRN_HEADER_BASED_ENABLED
   static inline
@@ -116,6 +119,26 @@ const char* lggmDbgGetHexStr ( const char* name, const char* ptr, int len, char*
   ( void ) len;
 #endif /*DBGPRN_ENABLED*/
   return buff;
+}
+
+#ifdef DBGPRN_HEADER_BASED_ENABLED
+  static inline
+#endif
+const char* lggmDbgVersion ( char* buffer, int buffer_len )
+{
+  const int string_length = buffer_len - 1 < version_info_txt_len
+                            ? buffer_len
+                            : version_info_txt_len;
+
+  if ( buffer_len == 0 || version_info_txt_len == 0 )
+  {
+    return NULL;
+  }
+
+  strncpy ( buffer, (const char *)version_info_txt, string_length );
+  buffer[string_length] = '\0';
+
+  return buffer;
 }
 
 #endif /* DBGPRN_C_INCLUDED */

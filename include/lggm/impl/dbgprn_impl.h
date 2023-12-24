@@ -18,6 +18,8 @@ const char* lggmDbgGetStrStr ( const char* name, const char* val, char* buff );
 
 const char* lggmDbgGetHexStr ( const char* name, const char* ptr, int len, char* buff );
 
+const char* lggmDbgVersion ( char* buffer, int buffer_len );
+
 #endif /*DBGPRN_HEADER_BASED_ENABLED*/
 
 #ifdef __cplusplus
