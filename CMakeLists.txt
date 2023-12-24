@@ -28,23 +28,23 @@ endif()
     message(STATUS "CMAKE_EXE_LINKER_FLAGS=[${CMAKE_EXE_LINKER_FLAGS}]")
 
 include_directories (
-     include
+     ${CMAKE_CURRENT_SOURCE_DIR}/include
      )
 
 #
 # declare autocreated folders and variables
 #
 
-set (hex_versions_dest_folder include/lggm/versions)
-set (conv_util script/conv/template_to_hex.sh)
-set (get_version_util script/version/get_component_version_info.sh)
+set (lggm-hex-versions-dest-folder include/lggm/versions)
+set (lggm-conv-util ${CMAKE_CURRENT_SOURCE_DIR}/script/conv/template_to_hex.sh)
+set (lggm-get-version-util ${CMAKE_CURRENT_SOURCE_DIR}/script/version/get_component_version_info.sh)
 
 #
 # create the output folder
 #
 
 add_custom_target(lggm-build-time-make-directory ALL
-    COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_SOURCE_DIR}/${hex_versions_dest_folder}
+    COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_SOURCE_DIR}/${lggm-hex-versions-dest-folder}
 )
 
 #
@@ -52,8 +52,8 @@ add_custom_target(lggm-build-time-make-directory ALL
 #
 
 add_custom_target(lggm-build-time-get-version-info ALL
-    COMMAND ${CMAKE_SOURCE_DIR}/${get_version_util} ${CMAKE_SOURCE_DIR}
-    COMMAND ${CMAKE_SOURCE_DIR}/${conv_util} ${CMAKE_SOURCE_DIR} version_info.txt "${hex_versions_dest_folder}/version_info.h"
+    COMMAND ${lggm-get-version-util} ${CMAKE_CURRENT_SOURCE_DIR}
+    COMMAND ${lggm-conv-util} ${CMAKE_CURRENT_SOURCE_DIR} version_info.txt "${lggm-hex-versions-dest-folder}/version_info.h"
 )
 
 #
@@ -61,15 +61,18 @@ add_custom_target(lggm-build-time-get-version-info ALL
 #
 
 add_library ( lggm
-     include/lggm/lggm.h
-     include/lggm/lggm.h
-     include/lggm/dbgprn.h
-     src/lggm/dbgprn.c
+     ${CMAKE_CURRENT_SOURCE_DIR}/include/lggm/lggm.h
+     ${CMAKE_CURRENT_SOURCE_DIR}/include/lggm/lggm.h
+     ${CMAKE_CURRENT_SOURCE_DIR}/include/lggm/dbgprn.h
+     ${CMAKE_CURRENT_SOURCE_DIR}/src/lggm/dbgprn.c
      )
 
 add_dependencies( lggm
-    lggm-build-time-make-directory
     lggm-build-time-get-version-info
+    )
+
+add_dependencies( lggm-build-time-get-version-info
+    lggm-build-time-make-directory
     )
 
 set_target_properties( lggm
@@ -79,7 +82,7 @@ set_target_properties( lggm
 
 if(NOT IS_SUBPROJECT)
     add_executable ( lggm_test
-         src/main.cpp
+         ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp
          )
 
     target_link_libraries(lggm_test
