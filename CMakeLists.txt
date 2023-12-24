@@ -31,12 +31,46 @@ include_directories (
      include
      )
 
+#
+# declare autocreated folders and variables
+#
+
+set (hex_versions_dest_folder include/lggm/versions)
+set (conv_util script/conv/template_to_hex.sh)
+set (get_version_util script/version/get_component_version_info.sh)
+
+#
+# create the output folder
+#
+
+add_custom_target(build-time-make-directory ALL
+    COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_SOURCE_DIR}/${hex_versions_dest_folder}
+)
+
+#
+# get version info
+#
+
+add_custom_target(build-time-get-version-info ALL
+    COMMAND ${CMAKE_SOURCE_DIR}/${get_version_util} ${CMAKE_SOURCE_DIR}
+    COMMAND ${CMAKE_SOURCE_DIR}/${conv_util} ${CMAKE_SOURCE_DIR} version_info.txt "${hex_versions_dest_folder}/version_info.h"
+)
+
+#
+# declare library contents
+#
+
 add_library ( lggm
      include/lggm/lggm.h
      include/lggm/lggm.h
      include/lggm/dbgprn.h
      src/lggm/dbgprn.c
      )
+
+add_dependencies( lggm
+    build-time-make-directory
+    build-time-get-version-info
+    )
 
 set_target_properties( lggm
      PROPERTIES
