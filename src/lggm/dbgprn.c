@@ -126,16 +126,16 @@ const char* lggmDbgGetHexStr ( const char* name, const char* ptr, int len, char*
 #endif
 const char* lggmDbgVersion ( char* buffer, int buffer_len )
 {
-  const int string_length = buffer_len - 1 < version_info_txt_len
-                            ? buffer_len
-                            : version_info_txt_len;
+  const size_t string_length = ( size_t ) ( buffer_len - 1 ) < version_info_txt_len
+                               ? ( size_t ) ( buffer_len - 1 )
+                               : version_info_txt_len;
 
   if ( buffer_len == 0 || version_info_txt_len == 0 )
   {
     return NULL;
   }
 
-  strncpy ( buffer, (const char *)version_info_txt, string_length );
+  strncpy ( buffer, ( const char* ) version_info_txt, string_length );
   buffer[string_length] = '\0';
 
   return buffer;
