@@ -43,7 +43,7 @@ set (get_version_util script/version/get_component_version_info.sh)
 # create the output folder
 #
 
-add_custom_target(build-time-make-directory ALL
+add_custom_target(lggm-build-time-make-directory ALL
     COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_SOURCE_DIR}/${hex_versions_dest_folder}
 )
 
@@ -51,7 +51,7 @@ add_custom_target(build-time-make-directory ALL
 # get version info
 #
 
-add_custom_target(build-time-get-version-info ALL
+add_custom_target(lggm-build-time-get-version-info ALL
     COMMAND ${CMAKE_SOURCE_DIR}/${get_version_util} ${CMAKE_SOURCE_DIR}
     COMMAND ${CMAKE_SOURCE_DIR}/${conv_util} ${CMAKE_SOURCE_DIR} version_info.txt "${hex_versions_dest_folder}/version_info.h"
 )
@@ -68,8 +68,8 @@ add_library ( lggm
      )
 
 add_dependencies( lggm
-    build-time-make-directory
-    build-time-get-version-info
+    lggm-build-time-make-directory
+    lggm-build-time-get-version-info
     )
 
 set_target_properties( lggm
