@@ -53,7 +53,7 @@ add_custom_target(lggm-build-time-make-directory ALL
 
 add_custom_target(lggm-build-time-get-version-info ALL
     COMMAND ${lggm-get-version-util} ${CMAKE_CURRENT_SOURCE_DIR}
-    COMMAND ${lggm-conv-util} ${CMAKE_CURRENT_SOURCE_DIR} version_info.txt "${lggm-hex-versions-dest-folder}/version_info.h"
+    COMMAND ${lggm-conv-util} ${CMAKE_CURRENT_SOURCE_DIR} version_info_lggm.txt "${lggm-hex-versions-dest-folder}/version_info_lggm.h"
 )
 
 #

@@ -30,7 +30,7 @@ GIT_IF_DIRTY_COMMIT="<git dirty status is unknown>"
 
 function get_output_file_name()
 {
-    echo "${VERSION_INFO_FILE_NAME}.${VERSION_INFO_FILE_EXT}"
+    echo "${VERSION_INFO_FILE_NAME}_${COMPONENT_NAME}.${VERSION_INFO_FILE_EXT}"
 }
 
 #-------------------------------------------------------------------------------

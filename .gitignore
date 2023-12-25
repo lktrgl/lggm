@@ -2,5 +2,5 @@
 .cproject
 .project
 build
-version_info.txt
-include/lggm/versions/version_info.h
+version_info*.txt
+include/lggm/versions/version_info*.h
