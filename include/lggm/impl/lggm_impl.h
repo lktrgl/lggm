@@ -4,6 +4,7 @@
 #include <ostream>
 #include <fstream>
 #include <string>
+#include <string_view>
 #include <chrono>
 #include <iomanip>
 #include <tuple>
@@ -32,7 +33,7 @@ constexpr size_t g_defaultRullerWidth = 20;
 namespace details
 {
 
-// Note: this include has been plached here to make the version information falling under the 'details' namespace scope
+// Note: this include has been placed here to make the version information falling under the 'details' namespace scope
 #include <lggm/versions/version_info_lggm.h>
 
 template <typename Stream>
@@ -342,8 +343,8 @@ public:
   static std::string_view getVersion()
   {
     return std::string_view (
-             reinterpret_cast<const char*> ( details::gen::code_template::version_info_lggm_txt ),
-             details::gen::code_template::version_info_lggm_txt_len
+             reinterpret_cast<const char*> ( lggm::details::gen::code_template::version_info_lggm_txt ),
+             lggm::details::gen::code_template::version_info_lggm_txt_len
            );
   }
 
