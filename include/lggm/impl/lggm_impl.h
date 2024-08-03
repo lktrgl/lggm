@@ -142,7 +142,10 @@ public:
     }
 
     doStreamPrefix() << msg << std::endl;
+
+    doStreamPrefix().flush();
   }
+
   template <size_t PLACEHOLDER_COUNT, typename T>
   void doRuler ( T const& a, T const& b, std::string const& name, T const& value )
   {
@@ -166,6 +169,8 @@ public:
     getOutStream()
         << ":[" << a << ", " << value << ", " << b << "]"
         << std::endl;
+
+    getOutStream().flush();
   }
 
   template <size_t PLACEHOLDER_COUNT, typename T>
@@ -215,6 +220,8 @@ public:
         << name2 << ":[" << a2 << ", " << value2 << ", " << b2 << "] "
         << "}"
         << std::endl;
+
+    getOutStream().flush();
   }
 
   template <typename T>
@@ -237,6 +244,8 @@ public:
     }
 
     getOutStream() << " }" << std::endl;
+
+    getOutStream().flush();
   }
 
   template <typename ... ARGS>
@@ -260,6 +269,8 @@ public:
                      << "\" = '"
                      << value.toStdString()
                      << "'" << std::endl;
+
+    doStreamPrefix().flush();
   }
 
   template <typename T>
@@ -275,6 +286,8 @@ public:
                      << "\" = '"
                      << value
                      << "'" << std::endl;
+
+    doStreamPrefix().flush();
   }
 #else
   template <typename T>
@@ -290,6 +303,8 @@ public:
                      << "\" = '"
                      << value
                      << "'" << std::endl;
+
+    doStreamPrefix().flush();
   }
 #endif // ifdef QSTRING_H
 
@@ -306,6 +321,8 @@ public:
                      << "\" = '"
                      << static_cast<size_t> ( static_cast<typename std::underlying_type<T>::type> ( value ) )
                      << "'" << std::endl;
+
+    doStreamPrefix().flush();
   }
 
   void doScope ()
@@ -332,6 +349,8 @@ public:
     else if ( m_isStreamed )
     {
       getOutStream() << std::endl;
+
+      getOutStream().flush();
     }
   }
 
@@ -368,6 +387,8 @@ private:
         << ( isFirst ? ( isFirst = false, "" ) : "; " )
         << std::get<Indexes> ( value ) ), ... );
     getOutStream()  << " }" << std::endl;
+
+    getOutStream().flush();
   }
 
   template <typename T>
@@ -404,6 +425,8 @@ private:
 
     getOutStream()
         << "]";
+
+    getOutStream().flush();
   }
 
   template <size_t PLACEHOLDER_COUNT>
@@ -419,6 +442,8 @@ private:
 
     getOutStream()
         << "]";
+
+    getOutStream().flush();
   }
 
   Stream& getOutStream()
@@ -448,6 +473,8 @@ private:
     auto const in_time_t = std::chrono::system_clock::to_time_t ( start );
 
     getOutStream() << std::put_time ( std::localtime ( &in_time_t ), "%Y-%m-%d %H:%M:%S " );
+
+    getOutStream().flush();
 #elif defined(_MSC_VER)
     auto const tmm = std::chrono::system_clock::to_time_t ( start );
 
@@ -457,6 +484,8 @@ private:
     // TODO: check formating string
     // this edition vs the next line's   m_outputStream << std::put_time ( &mtm, "%Y-%m-%d %X " );
     getOutStream() << std::put_time ( &mtm, "%Y-%m-%d %H:%M:%S " );
+
+    getOutStream().flush();
 #else
 #error undefined platform
 #endif
@@ -491,6 +520,8 @@ private:
   {
     m_isScoped = true;
     doStreamPrefix() << msg << std::endl;
+
+    doStreamPrefix().flush();
   }
 
 private:
