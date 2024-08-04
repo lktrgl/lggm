@@ -79,6 +79,23 @@ function touch_output_file()
     touch "${out_file_name}"
 }
 
+
+#-----------------------------------------------------------------------------
+
+function get_file_contents_to_comment_block()
+{
+	local in_file_pathname="$1"
+	local buffer_str=$( cat ${in_file_pathname} )
+
+	local token1_to_remove="\\/\\*"
+	local token2_to_remove="\\*\\/"
+
+	buffer_str="${buffer_str//${token1_to_remove}/}"
+	buffer_str="${buffer_str//${token2_to_remove}/}"
+
+	echo -e "/*\n\nOrigin text data:\n====================\n\n${buffer_str}\n*/"
+}
+
 #-----------------------------------------------------------------------------
 
 function prepare_output_file_header()
@@ -119,13 +136,16 @@ function prepare_output_file_contents()
 
 function prepare_output_file_footer()
 {
-    local out_file_name="$1"
+	local in_file_pathname="$1"
+    local out_file_pathname="$2"
 
-    cat <<EOF_OUTPUT_FILE_FOOTER >> "${out_file_name}"
+    cat <<EOF_OUTPUT_FILE_FOOTER >> "${out_file_pathname}"
 
 #ifdef __cplusplus
 } // namespace gen::code_template
 #endif
+
+$( get_file_contents_to_comment_block "${in_file_pathname}" )
 
 EOF_OUTPUT_FILE_FOOTER
 }
@@ -139,7 +159,7 @@ function main()
     touch_output_file "${DEST_FILE_PATHNAME}"
     prepare_output_file_header "${DEST_FILE_PATHNAME}"
     prepare_output_file_contents "${SRC_FILE_PATHNAME}" "${DEST_FILE_PATHNAME}"
-    prepare_output_file_footer "${DEST_FILE_PATHNAME}"
+    prepare_output_file_footer "${SRC_FILE_PATHNAME}" "${DEST_FILE_PATHNAME}"
 }
 
 #-----------------------------------------------------------------------------
