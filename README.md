@@ -20,10 +20,8 @@ git clone --recurse-submodules --verbose --remote --progress git@github.com:lktr
     && cd lggm \
     && git submodule foreach --recursive git status \
     && git submodule foreach --recursive "${script_file}" \
-    && mkdir build \
-    && cd build \
-    && cmake .. \
-    && make all
+    && cmake -B build -S . \
+    && cmake --build build
 
 git config user.name "lktrgl"
 git config user.email "32882989+lktrgl@users.noreply.github.com"
