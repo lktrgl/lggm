@@ -24,6 +24,9 @@
   #define LGGM_PRINT_INT(var) do{ enum{LGGM_buff_len=1024};char LGGM_buff[LGGM_buff_len];DBGPRN_ENGINE(__FUNCTION__, __LINE__, lggmDbgGetStrInt(#var, var,LGGM_buff)); }while(0);
   #define LGGM_PRINT_INT_C(on,var) do{ if(on){enum{LGGM_buff_len=1024};char LGGM_buff[LGGM_buff_len];DBGPRN_ENGINE(__FUNCTION__, __LINE__, lggmDbgGetStrInt(#var, var,LGGM_buff));} }while(0);
 
+  #define LGGM_PRINT_STR_N(var,len) do{ enum{LGGM_buff_len=1024};char LGGM_buff[LGGM_buff_len];DBGPRN_ENGINE(__FUNCTION__, __LINE__, lggmDbgGetStrStrN(#var,var,len,LGGM_buff)); }while(0);
+  #define LGGM_PRINT_STR_N_C(on,var,len) do{ if(on){enum{LGGM_buff_len=1024};char LGGM_buff[LGGM_buff_len];DBGPRN_ENGINE(__FUNCTION__, __LINE__, lggmDbgGetStrStrN(#var,var,len,LGGM_buff));} }while(0);
+
   #define LGGM_PRINT_STR(var) do{ enum{LGGM_buff_len=1024};char LGGM_buff[LGGM_buff_len];DBGPRN_ENGINE(__FUNCTION__, __LINE__, lggmDbgGetStrStr(#var, var,LGGM_buff)); }while(0);
   #define LGGM_PRINT_STR_C(on,var) do{ if(on){enum{LGGM_buff_len=1024};char LGGM_buff[LGGM_buff_len];DBGPRN_ENGINE(__FUNCTION__, __LINE__, lggmDbgGetStrStr(#var, var,LGGM_buff));} }while(0);
 
@@ -42,6 +45,8 @@
   #define LGGM_PRINT_MSG_C(on,txt)
   #define LGGM_PRINT_INT(var)
   #define LGGM_PRINT_INT_C(on,var)
+  #define LGGM_PRINT_STR_N(var,len)
+  #define LGGM_PRINT_STR_N_C(on,var,len)
   #define LGGM_PRINT_STR(var)
   #define LGGM_PRINT_STR_C(on,var)
   #define LGGM_PRINT_HEX(ptr,len)

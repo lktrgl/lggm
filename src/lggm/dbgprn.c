@@ -84,6 +84,31 @@ const char* lggmDbgGetStrInt ( const char* name, int val, char* buff )
 #ifdef DBGPRN_HEADER_BASED_ENABLED
   static inline
 #endif
+const char* lggmDbgGetStrStrN ( const char* name, const char* val, int len, char* buff )
+{
+#ifdef DBGPRN_ENABLED
+  size_t first_len = 0;
+  sprintf ( buff, "%s='", name );
+  first_len = strlen ( buff );
+
+  while ( len-- )
+  {
+    * ( buff + first_len++ ) = *val++;
+  }
+
+  * ( buff + first_len ) = 0x00;
+  strcat ( buff, "'" );
+#else /*DBGPRN_ENABLED*/
+  ( void ) name;
+  ( void ) val;
+  ( void ) len;
+#endif /*DBGPRN_ENABLED*/
+  return buff;
+}
+
+#ifdef DBGPRN_HEADER_BASED_ENABLED
+  static inline
+#endif
 const char* lggmDbgGetStrStr ( const char* name, const char* val, char* buff )
 {
 #ifdef DBGPRN_ENABLED

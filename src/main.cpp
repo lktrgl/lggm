@@ -166,6 +166,8 @@ void doCLggmTest()
 
   const char* s = "a string";
 
+  LGGM_PRINT_STR_N ( s, 5 );
+
   LGGM_PRINT_STR ( s );
 
   const int n1 = 0x01020304;

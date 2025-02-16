@@ -14,6 +14,8 @@ void lggmDbgStdout ( const char* function, int line, const char* message );
 
 const char* lggmDbgGetStrInt ( const char* name, int val, char* buff );
 
+const char* lggmDbgGetStrStrN ( const char* name, const char* val, int len, char* buff );
+
 const char* lggmDbgGetStrStr ( const char* name, const char* val, char* buff );
 
 const char* lggmDbgGetHexStr ( const char* name, const char* ptr, int len, char* buff );
