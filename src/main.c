@@ -17,23 +17,29 @@
 void doCLggmTest()
 {
   LGGM_CALL_IN();
+  LGGM_CALL_IN_C ( 1 );
 
   LGGM_PRINT_MSG ( "before trace" );
+  LGGM_PRINT_MSG_C ( 1, "before trace" );
   LGGM_TRACE();
+  LGGM_TRACE_C ( 1 );
 
 #ifdef DBGPRN_ENABLED
   int a = 7;
 #endif /* DBGPRN_ENABLED */
 
   LGGM_PRINT_INT ( a );
+  LGGM_PRINT_INT_C ( 1, a );
 
 #ifdef DBGPRN_ENABLED
   const char* s = "a string";
 #endif /* DBGPRN_ENABLED */
 
   LGGM_PRINT_STR_N ( s, 5 );
+  LGGM_PRINT_STR_N_C ( 1, s, 5 );
 
   LGGM_PRINT_STR ( s );
+  LGGM_PRINT_STR_C ( 1, s );
 
 #ifdef DBGPRN_ENABLED
   const int n1 = 0x01020304;
@@ -41,15 +47,10 @@ void doCLggmTest()
 #endif /* DBGPRN_ENABLED */
 
   LGGM_PRINT_HEX ( p1, sizeof ( n1 ) );
-
-#ifdef DBGPRN_ENABLED
-  const int n2 = 0x04030201;
-  const char* p2 = ( const char* ) &n2;
-#endif /* DBGPRN_ENABLED */
-
-  LGGM_PRINT_HEX ( p2, sizeof ( n2 ) );
+  LGGM_PRINT_HEX_C ( 1, p1, sizeof ( n1 ) );
 
   LGGM_CALL_OUT();
+  LGGM_CALL_OUT_C ( 1 );
 }
 
 /*---------------------------------------------------------------------------*/
