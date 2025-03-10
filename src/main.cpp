@@ -1,7 +1,14 @@
+/*
 #define LGGM_ENABLE_LOGGER
+*/
 #include "lggm/lggm.h"
 
+/* to enable tracing UNcomment the following line */
+/*
+#define DBGPRN_HEADER_BASED_ENABLED
 #define DBGPRN_ENABLED
+#define DBGPRN_TO_STDOUT
+*/
 #include "lggm/dbgprn.h"
 
 #include <cstdint>
@@ -45,13 +52,17 @@ void doMacroTest()
   LGGM_TS();
   LGGM_TF();
 
+#ifdef LGGM_ENABLE_LOGGER
   int a = 3;
+#endif /* LGGM_ENABLE_LOGGER */
 
   // print an integer value
   LGGM_PS ( a );
   LGGM_PF ( a );
 
+#ifdef LGGM_ENABLE_LOGGER
   std::string s = "s";
+#endif /* LGGM_ENABLE_LOGGER */
 
   // print a string value
   LGGM_PS ( s );
@@ -74,51 +85,63 @@ void doMacroTest()
   LGGM_TS();
   LGGM_TF();
 
+#ifdef LGGM_ENABLE_LOGGER
   std::vector const v = {1, 2, 3};
+#endif /* LGGM_ENABLE_LOGGER */
 
   // print a vector-like value
   LGGM_VS ( v );
   LGGM_VF ( v );
 
+#ifdef LGGM_ENABLE_LOGGER
   int x0 = -3;
   int x1 = 4;
   int x2 = 7;
+#endif /* LGGM_ENABLE_LOGGER */
 
   // print an integer ruler
   LGGM_RS ( x0, x2, x1 );
   LGGM_RF ( x0, x2, x1 );
 
+#ifdef LGGM_ENABLE_LOGGER
   double dx0 = -3.0;
   double dx1 = 4.0;
   double dx2 = 7.0;
+#endif /* LGGM_ENABLE_LOGGER */
 
   // print a floating point ruler
   LGGM_RS ( dx0, dx2, dx1 );
   LGGM_RF ( dx0, dx2, dx1 );
 
+#ifdef LGGM_ENABLE_LOGGER
   int a0 = -3;
   int a1 = 4;
   int a2 = 7;
   int b0 = -3;
   int b1 = 4;
   int b2 = 7;
+#endif /* LGGM_ENABLE_LOGGER */
 
   // print an integer plane ruler
   LGGM_QS ( a0, a2, b0, b2, a1, b1 );
   LGGM_QF ( a0, a2, b0, b2, a1, b1 );
 
+#ifdef LGGM_ENABLE_LOGGER
   double da0 = -3.0;
   double da1 = 4.0;
   double da2 = 7.0;
   double db0 = -3.0;
   double db1 = 4.0;
   double db2 = 7.0;
+#endif /* LGGM_ENABLE_LOGGER */
 
   // print a floating point plane ruler
   LGGM_QS ( da0, da2, db0, db2, da1, db1 );
   LGGM_QF ( da0, da2, db0, db2, da1, db1 );
 
-  std::tuple<int, double, std::string> tv{-4, 3.14, "str"};
+#ifdef LGGM_ENABLE_LOGGER
+  std::tuple<int, double, std::string> tv {-4, 3.14, "str"};
+#endif /* LGGM_ENABLE_LOGGER */
 
   // print an tuple value
   LGGM_PS ( tv );
@@ -160,23 +183,31 @@ void doCLggmTest()
   LGGM_PRINT_MSG ( "before trace" );
   LGGM_TRACE();
 
+#ifdef DBGPRN_ENABLED
   int a = 7;
+#endif /* DBGPRN_ENABLED */
 
   LGGM_PRINT_INT ( a );
 
+#ifdef DBGPRN_ENABLED
   const char* s = "a string";
+#endif /* DBGPRN_ENABLED */
 
   LGGM_PRINT_STR_N ( s, 5 );
 
   LGGM_PRINT_STR ( s );
 
+#ifdef DBGPRN_ENABLED
   const int n1 = 0x01020304;
   const char* p1 = ( const char* ) &n1;
+#endif /* DBGPRN_ENABLED */
 
   LGGM_PRINT_HEX ( p1, sizeof ( n1 ) );
 
+#ifdef DBGPRN_ENABLED
   const int n2 = 0x04030201;
   const char* p2 = ( const char* ) &n2;
+#endif /* DBGPRN_ENABLED */
 
   LGGM_PRINT_HEX ( p2, sizeof ( n2 ) );
 
