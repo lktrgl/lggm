@@ -1,15 +1,21 @@
 #ifndef DBGPRN_C_INCLUDED
 #define DBGPRN_C_INCLUDED
 
+/*---------------------------------------------------------------------------*/
+
 #include <lggm/dbgprn.h>
 
 #include <lggm/impl/dbgprn_cfg.h>
 
 #include <lggm/versions/version_info_lggm.h>
 
+/*---------------------------------------------------------------------------*/
+
 #include <time.h>
 #include <stdio.h>
 #include <string.h>
+
+/*---------------------------------------------------------------------------*/
 
 #ifdef DBGPRN_HEADER_BASED_ENABLED
   static inline
@@ -41,6 +47,8 @@ void lggmDbg ( const char* function, int line, const char* message )
 #endif /*DBGPRN_ENABLED*/
 }
 
+/*---------------------------------------------------------------------------*/
+
 #ifdef DBGPRN_HEADER_BASED_ENABLED
   static inline
 #endif
@@ -67,6 +75,8 @@ void lggmDbgStdout ( const char* function, int line, const char* message )
 #endif /*DBGPRN_ENABLED*/
 }
 
+/*---------------------------------------------------------------------------*/
+
 #ifdef DBGPRN_HEADER_BASED_ENABLED
   static inline
 #endif
@@ -80,6 +90,8 @@ const char* lggmDbgGetStrInt ( const char* name, int val, char* buff )
 #endif /*DBGPRN_ENABLED*/
   return buff;
 }
+
+/*---------------------------------------------------------------------------*/
 
 #ifdef DBGPRN_HEADER_BASED_ENABLED
   static inline
@@ -106,6 +118,8 @@ const char* lggmDbgGetStrStrN ( const char* name, const char* val, int len, char
   return buff;
 }
 
+/*---------------------------------------------------------------------------*/
+
 #ifdef DBGPRN_HEADER_BASED_ENABLED
   static inline
 #endif
@@ -119,6 +133,8 @@ const char* lggmDbgGetStrStr ( const char* name, const char* val, char* buff )
 #endif /*DBGPRN_ENABLED*/
   return buff;
 }
+
+/*---------------------------------------------------------------------------*/
 
 #ifdef DBGPRN_HEADER_BASED_ENABLED
   static inline
@@ -146,6 +162,8 @@ const char* lggmDbgGetHexStr ( const char* name, const char* ptr, int len, char*
   return buff;
 }
 
+/*---------------------------------------------------------------------------*/
+
 #ifdef DBGPRN_HEADER_BASED_ENABLED
   static inline
 #endif
@@ -165,5 +183,7 @@ const char* lggmDbgVersion ( char* buffer, int buffer_len )
 
   return buffer;
 }
+
+/*---------------------------------------------------------------------------*/
 
 #endif /* DBGPRN_C_INCLUDED */

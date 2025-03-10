@@ -81,11 +81,21 @@ set_target_properties( lggm
      )
 
 if(NOT IS_SUBPROJECT)
-    add_executable ( lggm_test
+    add_executable ( lggm_test_cpp
          ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp
          )
 
-    target_link_libraries(lggm_test
+    target_link_libraries(lggm_test_cpp
+         lggm
+         )
+endif()
+
+if(NOT IS_SUBPROJECT)
+    add_executable ( lggm_test_c
+         ${CMAKE_CURRENT_SOURCE_DIR}/src/main.c
+         )
+
+    target_link_libraries(lggm_test_c
          lggm
          )
 endif()

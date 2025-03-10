@@ -1,13 +1,21 @@
 #pragma once
 
+/*---------------------------------------------------------------------------*/
+
 #include <iostream>
 #include <fstream>
+
+/*---------------------------------------------------------------------------*/
 
 #define LGGM_CAT(a,b) LGGM_CAT2(a, b)
 #define LGGM_CAT2(a,b) a ## b
 
+/*---------------------------------------------------------------------------*/
+
 #define LGGM_FUNCTION_MACRO __PRETTY_FUNCTION__
 //#define LGGM_FUNCTION_MACRO __FUNCTION__
+
+/*---------------------------------------------------------------------------*/
 
 // stream to std::cout
 
@@ -74,5 +82,7 @@
   #define LGGM_RF(a, b, v)
 
   #define LGGM_QF(a1, b1, a2, b2, v1, v2)
+
+/*---------------------------------------------------------------------------*/
 
 #endif // LGGM_ENABLE_LOGGER

@@ -1,10 +1,14 @@
 #ifndef DBGPRN_IMPL_H_INCLUDED
 #define DBGPRN_IMPL_H_INCLUDED
 
+/*---------------------------------------------------------------------------*/
+
 #ifdef __cplusplus
 extern "C"
 {
 #endif
+
+/*---------------------------------------------------------------------------*/
 
 #ifndef DBGPRN_HEADER_BASED_ENABLED
 
@@ -24,8 +28,12 @@ const char* lggmDbgVersion ( char* buffer, int buffer_len );
 
 #endif /*DBGPRN_HEADER_BASED_ENABLED*/
 
+/*---------------------------------------------------------------------------*/
+
 #ifdef __cplusplus
 } /* extern "C" */
 #endif
+
+/*---------------------------------------------------------------------------*/
 
 #endif /* DBGPRN_IMPL_H_INCLUDED */

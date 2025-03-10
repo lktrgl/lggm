@@ -1,5 +1,7 @@
 #pragma once
 
+/*---------------------------------------------------------------------------*/
+
 #include <cstdint>
 #include <ostream>
 #include <fstream>
@@ -10,10 +12,16 @@
 #include <tuple>
 #include <type_traits>
 
+/*---------------------------------------------------------------------------*/
+
 namespace lggm
 {
 
+/*---------------------------------------------------------------------------*/
+
 std::string const g_outFileName = "/home/boil/Work/MyTmp/lggm.txt";
+
+/*---------------------------------------------------------------------------*/
 
 enum class format : uint8_t
 {
@@ -24,17 +32,27 @@ enum class format : uint8_t
   line = 0b1000,
 };
 
+/*---------------------------------------------------------------------------*/
+
 constexpr uint8_t g_defaultFormat = static_cast<std::underlying_type<format>::type> ( format::timestamp )
                                     | static_cast<std::underlying_type<format>::type> ( format::function )
                                     | static_cast<std::underlying_type<format>::type> ( format::line );
 
+/*---------------------------------------------------------------------------*/
+
 constexpr size_t g_defaultRullerWidth = 20;
+
+/*---------------------------------------------------------------------------*/
 
 namespace details
 {
 
+/*---------------------------------------------------------------------------*/
+
 // Note: this include has been placed here to make the version information falling under the 'details' namespace scope
 #include <lggm/versions/version_info_lggm.h>
+
+/*---------------------------------------------------------------------------*/
 
 template <typename Stream>
 struct streamTraits_t
@@ -51,6 +69,8 @@ struct streamTraits_t
   }
 };
 
+/*---------------------------------------------------------------------------*/
+
 template <>
 struct streamTraits_t<std::ofstream>
 {
@@ -65,6 +85,8 @@ struct streamTraits_t<std::ofstream>
     return stream.is_open() && stream.good();
   }
 };
+
+/*---------------------------------------------------------------------------*/
 
 template < typename CONTAINER >
 class is_iterable
@@ -84,12 +106,17 @@ public:
                                 && decltype ( test_cend<CONTAINER> ( nullptr ) ) ::value;
 };
 
+/*---------------------------------------------------------------------------*/
 
 template < typename CONTAINER >
 constexpr bool is_iterable_v = is_iterable<CONTAINER>::value;
 
+/*---------------------------------------------------------------------------*/
+
 template < typename CONTAINER >
 struct is_basic_string : std::false_type {};
+
+/*---------------------------------------------------------------------------*/
 
 template < template<typename, typename, typename> typename CONTAINER, typename SUBTYPE, typename TRAITS, typename ALLOCATOR>
 class is_basic_string<CONTAINER<SUBTYPE, TRAITS, ALLOCATOR>>
@@ -100,11 +127,17 @@ public:
   static constexpr bool value = std::is_same<std::basic_string<SUBTYPE, TRAITS, ALLOCATOR>, type> ::value;
 };
 
+/*---------------------------------------------------------------------------*/
+
 template < typename CONTAINER >
 constexpr bool is_basic_string_v = is_basic_string<CONTAINER>::value;
 
+/*---------------------------------------------------------------------------*/
+
 template < typename CONTAINER >
 struct is_basic_string_view : std::false_type {};
+
+/*---------------------------------------------------------------------------*/
 
 template < template<typename, typename> typename CONTAINER, typename SUBTYPE, typename TRAITS>
 class is_basic_string_view<CONTAINER<SUBTYPE, TRAITS>>
@@ -115,9 +148,16 @@ public:
   static constexpr bool value = std::is_same<std::basic_string_view<SUBTYPE, TRAITS>, type> ::value;
 };
 
+/*---------------------------------------------------------------------------*/
+
 template < typename CONTAINER >
 constexpr bool is_basic_string_view_v = is_basic_string_view<CONTAINER>::value;
+
+/*---------------------------------------------------------------------------*/
+
 } // namespace details
+
+/*---------------------------------------------------------------------------*/
 
 template <typename Stream>
 class lggm
@@ -533,5 +573,7 @@ private:
   static constexpr uint8_t m_format = g_defaultFormat;
   static constexpr std::string const& m_outFileName = g_outFileName;
 };
+
+/*---------------------------------------------------------------------------*/
 
 } // namespace lggm

@@ -1,6 +1,8 @@
 #ifndef DBGPRN_MACRO_IMPL_H_INCLUDED
 #define DBGPRN_MACRO_IMPL_H_INCLUDED
 
+/*---------------------------------------------------------------------------*/
+
 #if defined(DBGPRN_ENABLED)
 
   #if defined(DBGPRN_TO_STDOUT)
@@ -53,5 +55,7 @@
   #define LGGM_PRINT_HEX_C(on,ptr,len)
 
 #endif
+
+/*---------------------------------------------------------------------------*/
 
 #endif /* DBGPRN_MACRO_IMPL_H_INCLUDED */

@@ -5,7 +5,9 @@
 
 /* to enable tracing UNcomment the following line */
 /*
+#define DBGPRN_HEADER_BASED_ENABLED
 #define DBGPRN_ENABLED
+#define DBGPRN_TO_STDOUT
 */
 
 /* ------------------------------------------------------------------------- */
