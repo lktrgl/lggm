@@ -183,7 +183,7 @@ public:
 
     doStreamPrefix() << msg << std::endl;
 
-    doStreamPrefix().flush();
+    getOutStream().flush();
   }
 
   template <size_t PLACEHOLDER_COUNT, typename T>
@@ -310,7 +310,7 @@ public:
                      << value.toStdString()
                      << "'" << std::endl;
 
-    doStreamPrefix().flush();
+    getOutStream().flush();
   }
 
   template <typename T>
@@ -327,7 +327,7 @@ public:
                      << value
                      << "'" << std::endl;
 
-    doStreamPrefix().flush();
+    getOutStream().flush();
   }
 #else
   template <typename T>
@@ -344,7 +344,7 @@ public:
                      << value
                      << "'" << std::endl;
 
-    doStreamPrefix().flush();
+    getOutStream().flush();
   }
 #endif // ifdef QSTRING_H
 
@@ -362,7 +362,7 @@ public:
                      << static_cast<size_t> ( static_cast<typename std::underlying_type<T>::type> ( value ) )
                      << "'" << std::endl;
 
-    doStreamPrefix().flush();
+    getOutStream().flush();
   }
 
   void doScope ()
@@ -561,7 +561,7 @@ private:
     m_isScoped = true;
     doStreamPrefix() << msg << std::endl;
 
-    doStreamPrefix().flush();
+    getOutStream().flush();
   }
 
 private:
