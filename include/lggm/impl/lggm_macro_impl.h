@@ -29,6 +29,8 @@
 
   #define LGGM_PS(v) lggm::lggm<decltype(std::cout)> ( std::cout, __LINE__, LGGM_FUNCTION_MACRO ).doNameValue ( #v , v )
 
+  #define LGGM_HS(v, n) lggm::lggm<decltype(std::cout)> ( std::cout, __LINE__, LGGM_FUNCTION_MACRO ).doNameHexValue ( #v , v, n )
+
   #define LGGM_VS(v) lggm::lggm<decltype(std::cout)> ( std::cout, __LINE__, LGGM_FUNCTION_MACRO ).doVectorNameValue ( #v , v )
 
   #define LGGM_RS(a, b, v) lggm::lggm<decltype(std::cout)>( std::cout, __LINE__, LGGM_FUNCTION_MACRO ).doRuler<lggm::g_defaultRullerWidth>( a, b, #v , v )
@@ -44,6 +46,8 @@
   #define LGGM_MF(m) std::ofstream LGGM_CAT(LGGM_afs, __LINE__); lggm::lggm ( LGGM_CAT(LGGM_afs, __LINE__), __LINE__, LGGM_FUNCTION_MACRO ).doMessage ( m )
 
   #define LGGM_PF(v) std::ofstream LGGM_CAT(LGGM_afs, __LINE__); lggm::lggm ( LGGM_CAT(LGGM_afs, __LINE__), __LINE__, LGGM_FUNCTION_MACRO ).doNameValue ( #v , v )
+
+  #define LGGM_HF(v, n) std::ofstream LGGM_CAT(LGGM_afs, __LINE__); lggm::lggm ( LGGM_CAT(LGGM_afs, __LINE__), __LINE__, LGGM_FUNCTION_MACRO ).doNameHexValue ( #v , v, n )
 
   #define LGGM_VF(v) std::ofstream LGGM_CAT(LGGM_afs, __LINE__); lggm::lggm ( LGGM_CAT(LGGM_afs, __LINE__), __LINE__, LGGM_FUNCTION_MACRO ).doVectorNameValue ( #v , v )
 
@@ -61,6 +65,8 @@
 
   #define LGGM_PS(v)
 
+  #define LGGM_HS(v, n)
+
   #define LGGM_VS(v)
 
   #define LGGM_RS(a, b, v)
@@ -76,6 +82,8 @@
   #define LGGM_MF(m)
 
   #define LGGM_PF(v)
+
+  #define LGGM_HF(v, n)
 
   #define LGGM_VF(v)
 

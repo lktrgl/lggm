@@ -91,13 +91,13 @@ struct streamTraits_t<std::ofstream>
 template < typename CONTAINER >
 class is_iterable
 {
-  template < typename U, typename = decltype ( std::cbegin ( std::declval<std::remove_cv_t<U>>() ) ) >
-  static std::true_type test_cbegin ( std::nullptr_t );
+  template < typename U, typename = decltype (std::cbegin (std::declval<std::remove_cv_t<U >> () ) ) >
+  static std::true_type test_cbegin (std::nullptr_t );
   template < typename U >
   static std::false_type test_cbegin ( ... );
 
-  template < typename U, typename = decltype ( std::cend ( std::declval<std::remove_cv_t<U>>() ) ) >
-  static std::true_type test_cend ( std::nullptr_t );
+  template < typename U, typename = decltype (std::cend (std::declval<std::remove_cv_t<U >> () ) ) >
+  static std::true_type test_cend (std::nullptr_t );
   template < typename U >
   static std::false_type test_cend ( ... );
 
@@ -119,9 +119,9 @@ struct is_basic_string : std::false_type {};
 /*---------------------------------------------------------------------------*/
 
 template < template<typename, typename, typename> typename CONTAINER, typename SUBTYPE, typename TRAITS, typename ALLOCATOR>
-class is_basic_string<CONTAINER<SUBTYPE, TRAITS, ALLOCATOR>>
+class is_basic_string<CONTAINER<SUBTYPE, TRAITS, ALLOCATOR >>
 {
-  using type = std::remove_cv_t<CONTAINER<SUBTYPE, TRAITS, ALLOCATOR>>;
+  using type = std::remove_cv_t<CONTAINER<SUBTYPE, TRAITS, ALLOCATOR >>;
 
 public:
   static constexpr bool value = std::is_same<std::basic_string<SUBTYPE, TRAITS, ALLOCATOR>, type> ::value;
@@ -140,9 +140,9 @@ struct is_basic_string_view : std::false_type {};
 /*---------------------------------------------------------------------------*/
 
 template < template<typename, typename> typename CONTAINER, typename SUBTYPE, typename TRAITS>
-class is_basic_string_view<CONTAINER<SUBTYPE, TRAITS>>
+class is_basic_string_view<CONTAINER<SUBTYPE, TRAITS >>
 {
-  using type = std::remove_cv_t<CONTAINER<SUBTYPE, TRAITS>>;
+  using type = std::remove_cv_t<CONTAINER<SUBTYPE, TRAITS >>;
 
 public:
   static constexpr bool value = std::is_same<std::basic_string_view<SUBTYPE, TRAITS>, type> ::value;
@@ -168,7 +168,7 @@ public:
     , m_lineNo ( lineNo )
     , m_functName ( functName )
   {
-    if ( !details::streamTraits_t<Stream>::initStream ( getOutStream(), m_outFileName, std::ios::out | std::ios::app ) )
+    if (! details::streamTraits_t<Stream>::initStream ( getOutStream(), m_outFileName, std::ios::out | std::ios::app ) )
     {
       throw std::runtime_error ( "cannot init the log stream" );
     }
@@ -176,7 +176,7 @@ public:
 
   void doMessage ( std::string const& msg )
   {
-    if ( !details::streamTraits_t<Stream>::isStreamReady ( getOutStream() ) )
+    if (! details::streamTraits_t<Stream>::isStreamReady ( getOutStream() ) )
     {
       return;
     }
@@ -189,7 +189,7 @@ public:
   template <size_t PLACEHOLDER_COUNT, typename T>
   void doRuler ( T const& a, T const& b, std::string const& name, T const& value )
   {
-    if ( !details::streamTraits_t<Stream>::isStreamReady ( getOutStream() ) )
+    if (! details::streamTraits_t<Stream>::isStreamReady ( getOutStream() ) )
     {
       return;
     }
@@ -218,7 +218,7 @@ public:
                       std::string const& name1, T const& value1,
                       std::string const& name2, T const& value2 )
   {
-    if ( !details::streamTraits_t<Stream>::isStreamReady ( getOutStream() ) )
+    if (! details::streamTraits_t<Stream>::isStreamReady ( getOutStream() ) )
     {
       return;
     }
@@ -267,7 +267,7 @@ public:
   template <typename T>
   void doVectorNameValue ( std::string const& name, T const& value )
   {
-    if ( !details::streamTraits_t<Stream>::isStreamReady ( getOutStream() ) )
+    if (! details::streamTraits_t<Stream>::isStreamReady ( getOutStream() ) )
     {
       return;
     }
@@ -292,7 +292,7 @@ public:
   void doNameValue ( std::string const& name,
                      std::tuple<ARGS...> const& value )
   {
-    doNameValue_tuple<ARGS...> ( name, value, std::make_integer_sequence<size_t, sizeof... ( ARGS ) >() );
+    doNameValue_tuple<ARGS...> ( name, value, std::make_integer_sequence<size_t, sizeof... (ARGS ) >() );
   }
 
 #ifdef QSTRING_H
@@ -300,7 +300,7 @@ public:
   std::enable_if_t<not std::is_enum<T>::value and std::is_same<QString, T>::value, void>
   doNameValue ( std::string const& name, T value )
   {
-    if ( !details::streamTraits_t<Stream>::isStreamReady ( getOutStream() ) )
+    if (! details::streamTraits_t<Stream>::isStreamReady ( getOutStream() ) )
     {
       return;
     }
@@ -317,7 +317,7 @@ public:
   std::enable_if_t<not std::is_enum<T>::value and not std::is_same<QString, T>::value, void>
   doNameValue ( std::string const& name, T value )
   {
-    if ( !details::streamTraits_t<Stream>::isStreamReady ( getOutStream() ) )
+    if (! details::streamTraits_t<Stream>::isStreamReady ( getOutStream() ) )
     {
       return;
     }
@@ -329,12 +329,13 @@ public:
 
     getOutStream().flush();
   }
+
 #else
   template <typename T>
   std::enable_if_t<not std::is_enum<T>::value, void>
   doNameValue ( std::string const& name, T value )
   {
-    if ( !details::streamTraits_t<Stream>::isStreamReady ( getOutStream() ) )
+    if (! details::streamTraits_t<Stream>::isStreamReady ( getOutStream() ) )
     {
       return;
     }
@@ -346,13 +347,14 @@ public:
 
     getOutStream().flush();
   }
+
 #endif // ifdef QSTRING_H
 
   template <typename T>
   std::enable_if_t<std::is_enum<T>::value, void>
   doNameValue ( std::string const& name, T value )
   {
-    if ( !details::streamTraits_t<Stream>::isStreamReady ( getOutStream() ) )
+    if (! details::streamTraits_t<Stream>::isStreamReady ( getOutStream() ) )
     {
       return;
     }
@@ -365,9 +367,44 @@ public:
     getOutStream().flush();
   }
 
+  template <typename T>
+  void doNameHexValue ( std::string const& name, T const* value, size_t value_len )
+  {
+    if (! details::streamTraits_t<Stream>::isStreamReady ( getOutStream() ) )
+    {
+      return;
+    }
+
+    doStreamPrefix() << "\"" << name
+                     << "\" = " << value_len << " : { ";
+
+    unsigned char const* p_begin = reinterpret_cast<unsigned char const*> ( value );
+    unsigned char const* p_end = reinterpret_cast<unsigned char const*> ( value ) + value_len;
+
+    bool is_first_item = true;
+
+    for ( unsigned char const* p = p_begin; p < p_end; ++p )
+    {
+      if ( is_first_item )
+      {
+        is_first_item = false;
+      }
+      else
+      {
+        getOutStream() << ", ";
+      }
+
+      getOutStream() << "0x" << std::hex << std::setw ( 2 ) << std::setfill ( '0' ) << static_cast<int> (*p );
+    }
+
+    getOutStream() << " }" << std::endl;
+
+    getOutStream().flush();
+  }
+
   void doScope ()
   {
-    if ( !details::streamTraits_t<Stream>::isStreamReady ( getOutStream() ) )
+    if (! details::streamTraits_t<Stream>::isStreamReady ( getOutStream() ) )
     {
       return;
     }
@@ -377,7 +414,7 @@ public:
 
   ~lggm()
   {
-    if ( !details::streamTraits_t<Stream>::isStreamReady ( getOutStream() ) )
+    if (! details::streamTraits_t<Stream>::isStreamReady ( getOutStream() ) )
     {
       return;
     }
@@ -413,7 +450,7 @@ private:
                            std::tuple<ARGS...> const& value,
                            std::integer_sequence<size_t, Indexes...> )
   {
-    if ( !details::streamTraits_t<Stream>::isStreamReady ( getOutStream() ) )
+    if (! details::streamTraits_t<Stream>::isStreamReady ( getOutStream() ) )
     {
       return;
     }
@@ -502,7 +539,7 @@ private:
 
   Stream& printTimestamp()
   {
-    if ( ! ( m_format & static_cast<std::underlying_type<format>::type> ( format::timestamp ) ) )
+    if (! ( m_format & static_cast<std::underlying_type<format>::type> ( format::timestamp ) ) )
     {
       return getOutStream();
     }
@@ -512,18 +549,18 @@ private:
 #if defined(__GNUC__)
     auto const in_time_t = std::chrono::system_clock::to_time_t ( start );
 
-    getOutStream() << std::put_time ( std::localtime ( &in_time_t ), "%Y-%m-%d %H:%M:%S " );
+    getOutStream() << std::put_time ( std::localtime (&in_time_t ), "%Y-%m-%d %H:%M:%S " );
 
     getOutStream().flush();
 #elif defined(_MSC_VER)
     auto const tmm = std::chrono::system_clock::to_time_t ( start );
 
     struct tm mtm;
-    localtime_s ( &mtm, &tmm );
+    localtime_s (&mtm, &tmm );
 
     // TODO: check formating string
     // this edition vs the next line's   m_outputStream << std::put_time ( &mtm, "%Y-%m-%d %X " );
-    getOutStream() << std::put_time ( &mtm, "%Y-%m-%d %H:%M:%S " );
+    getOutStream() << std::put_time (&mtm, "%Y-%m-%d %H:%M:%S " );
 
     getOutStream().flush();
 #else
@@ -535,8 +572,8 @@ private:
 
   std::string printDisposition ( size_t lineNo, std::string const& functName )
   {
-    if constexpr ( ! ( m_format & ( static_cast<std::underlying_type<format>::type> ( format::function )
-                                    | static_cast<std::underlying_type<format>::type> ( format::line ) ) ) )
+    if constexpr (! ( m_format & ( static_cast<std::underlying_type<format>::type> ( format::function )
+                                   | static_cast<std::underlying_type<format>::type> ( format::line ) ) ) )
     {
       return {};
     }

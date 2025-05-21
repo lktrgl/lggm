@@ -32,6 +32,7 @@ const char* lggmDbgVersion ( char* buffer, int buffer_len );
 
 #ifdef __cplusplus
 } /* extern "C" */
+
 #endif
 
 /*---------------------------------------------------------------------------*/

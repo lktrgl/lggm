@@ -69,6 +69,14 @@ void doMacroTest()
   LGGM_PS ( s );
   LGGM_PF ( s );
 
+#ifdef LGGM_ENABLE_LOGGER
+  std::string shex = "0123";
+#endif /* LGGM_ENABLE_LOGGER */
+
+  // print a hexadecimal string value
+  LGGM_HS ( shex.data(), shex.length() );
+  LGGM_HF ( shex.data(), shex.length() );
+
   enum class en : uint8_t
   {
     one = 3
@@ -159,6 +167,7 @@ void doCppClassTest()
     logger.doScope ();
     logger.doMessage (  "Message to stdout" );
   }
+
   {
     std::ofstream ofs;
     lggm::lggm logger ( ofs, __LINE__, __PRETTY_FUNCTION__ );

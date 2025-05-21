@@ -30,7 +30,7 @@ void lggmDbg ( const char* function, int line, const char* message )
   {
     char timeStamptBuff[64];
     time_t result = time ( NULL );
-    struct tm* locTime = localtime ( &result );
+    struct tm* locTime = localtime (&result );
     strftime ( timeStamptBuff, sizeof timeStamptBuff, "%Y-%m-%d %H:%M:%S", locTime );
     fprintf ( out, "%s %s:%d %s\n",
               timeStamptBuff,
@@ -59,7 +59,7 @@ void lggmDbgStdout ( const char* function, int line, const char* message )
   {
     char timeStamptBuff[64];
     time_t result = time ( NULL );
-    struct tm* locTime = localtime ( &result );
+    struct tm* locTime = localtime (&result );
     strftime ( timeStamptBuff, sizeof timeStamptBuff, "%Y-%m-%d %H:%M:%S", locTime );
     printf ( "%s %s:%d %s\n",
              timeStamptBuff,
@@ -144,15 +144,15 @@ const char* lggmDbgGetHexStr ( const char* name, const char* ptr, int len, char*
 #ifdef DBGPRN_ENABLED
   int first_byte = 1;
   size_t buff_len = 0;
-  buff_len += sprintf ( &buff[buff_len], "%s='", name );
+  buff_len += sprintf (&buff[buff_len], "%s='", name );
 
   for ( int i = 0; len; ++i, --len )
   {
-    buff_len += sprintf ( &buff[buff_len], ( ( first_byte ) ? ( first_byte = 0, "%02X" ) : ( ":%02X" ) ),
-                          ( unsigned char ) ptr[i] );
+    buff_len += sprintf (&buff[buff_len], ( ( first_byte ) ? ( first_byte = 0, "%02X" ) : ( ":%02X" ) ),
+                         ( unsigned char ) ptr[i] );
   }
 
-  buff_len += sprintf ( &buff[buff_len], "'" );
+  buff_len += sprintf (&buff[buff_len], "'" );
 
 #else /*DBGPRN_ENABLED*/
   ( void ) name;
