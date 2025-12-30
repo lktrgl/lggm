@@ -2,6 +2,10 @@
 
 /*---------------------------------------------------------------------------*/
 
+#include <lggm/versions/version_info_lggm.h>
+
+/*---------------------------------------------------------------------------*/
+
 #include <cstdint>
 #include <ostream>
 #include <fstream>
@@ -46,11 +50,6 @@ constexpr size_t g_defaultRullerWidth = 20;
 
 namespace details
 {
-
-/*---------------------------------------------------------------------------*/
-
-// Note: this include has been placed here to make the version information falling under the 'details' namespace scope
-#include <lggm/versions/version_info_lggm.h>
 
 /*---------------------------------------------------------------------------*/
 
@@ -439,8 +438,8 @@ public:
   static std::string_view getVersion()
   {
     return std::string_view (
-             reinterpret_cast<const char*> ( lggm::details::gen::code_template::version_info_lggm_txt ),
-             lggm::details::gen::code_template::version_info_lggm_txt_len
+             reinterpret_cast<const char*> ( gen::code_template::version_info_lggm_txt ),
+             gen::code_template::version_info_lggm_txt_len
            );
   }
 
