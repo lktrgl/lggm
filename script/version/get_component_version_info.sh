@@ -11,6 +11,8 @@ COMPONENT_NAME=$( basename $PWD )
 
 # declare output file name and etc
 
+GIT_SUBMODLE_FILE_NAME=".git"
+GIT_FOLDER_NAME=".git"
 VERSION_INFO_FILE_NAME="version_info"
 VERSION_INFO_FILE_EXT="txt"
 GIT_HAS_UNTRACKED=" (with some untracked)"
@@ -37,7 +39,11 @@ function get_output_file_name()
 
 function get_git_status()
 {
-    echo "$( git status || echo "${ERROR_NO_GIT_REPOSITORY}" )"
+    if [ ! -f "${GIT_SUBMODLE_FILE_NAME}" ] && [ ! -d "${GIT_FOLDER_NAME}" ]; then
+        echo "${ERROR_NO_GIT_REPOSITORY}"
+    else
+        echo "$( git status || echo "${ERROR_NO_GIT_REPOSITORY}" )"
+    fi
 }
 
 #-------------------------------------------------------------------------------
