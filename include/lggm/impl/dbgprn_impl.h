@@ -28,6 +28,8 @@ const char* lggmDbgVersion ( char* buffer, int buffer_len );
 
 const char* lggmDbgGetIntRuleStr ( int a, int b, int x, char* buff );
 
+const char* lggmDbgGetIntSquareStr ( int a, int b, int c, int d, int x, int y, char* buff );
+
 #endif /*DBGPRN_HEADER_BASED_ENABLED*/
 
 /*---------------------------------------------------------------------------*/

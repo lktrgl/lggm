@@ -1,9 +1,9 @@
 /* to enable tracing UNcomment the following line */
-/*
+
 #define DBGPRN_HEADER_BASED_ENABLED
 #define DBGPRN_ENABLED
 #define DBGPRN_TO_STDOUT
-*/
+
 #include "lggm/dbgprn.h"
 
 /*---------------------------------------------------------------------------*/
@@ -51,6 +51,9 @@ void doCLggmTest()
 
   LGGM_PRINT_IRUL (-2, 2, 0 );
   LGGM_PRINT_IRUL_C ( 1, -2, 2, 0 );
+
+  LGGM_PRINT_ISQR (-2, 2, -2, 2, 0, 0 );
+  LGGM_PRINT_ISQR_C ( 1, -2, 2, -2, 2, 0, 0 );
 
   LGGM_CALL_OUT();
   LGGM_CALL_OUT_C ( 1 );

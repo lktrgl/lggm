@@ -38,6 +38,9 @@
   #define LGGM_PRINT_IRUL(a,b,x) do{ enum{LGGM_buff_len=1024};char LGGM_buff[LGGM_buff_len];DBGPRN_ENGINE(__FUNCTION__, __LINE__, lggmDbgGetIntRuleStr((a), (b), (x), LGGM_buff)); }while(0);
   #define LGGM_PRINT_IRUL_C(on,a,b,x) do{ if(on){LGGM_PRINT_IRUL(a,b,x);} }while(0);
 
+  #define LGGM_PRINT_ISQR(a,b,c,d,x,y) do{ enum{LGGM_buff_len=1024};char LGGM_buff[LGGM_buff_len];DBGPRN_ENGINE(__FUNCTION__, __LINE__, lggmDbgGetIntSquareStr((a), (b), (c), (d), (x), (y), LGGM_buff)); }while(0);
+  #define LGGM_PRINT_ISQR_C(on,a,b,c,d,x,y) do{ if(on){LGGM_PRINT_ISQR(a,b,c,d,x,y);} }while(0);
+
 #else
 
   #define LGGM_TRACE()
@@ -58,6 +61,8 @@
   #define LGGM_PRINT_HEX_C(on,ptr,len)
   #define LGGM_PRINT_IRUL(a,b,x)
   #define LGGM_PRINT_IRUL_C(on,a,b,x)
+  #define LGGM_PRINT_ISQR(a,b,c,d,x,y)
+  #define LGGM_PRINT_ISQR_C(on,a,b,c,d,x,y)
 
 
 #endif

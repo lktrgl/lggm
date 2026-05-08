@@ -225,5 +225,69 @@ const char* lggmDbgGetIntRuleStr ( int a, int b, int x, char* buff )
 #undef LGGM_DBG_GET_INT_RULE_STR_WIDTH
 
 /*---------------------------------------------------------------------------*/
+//#define DBGPRN_ENABLED
+
+#define LGGM_DBG_GET_INT_SQR_STR_WIDTH (15)
+#define LGGM_DBG_GET_INT_SQR_STR_HEIGHT (15)
+#ifdef DBGPRN_HEADER_BASED_ENABLED
+  static inline
+#endif
+const char* lggmDbgGetIntSquareStr ( int a, int b, int c, int d, int x, int y, char* buff )
+{
+#ifdef DBGPRN_ENABLED
+  size_t buff_len = 0;
+  buff_len += sprintf (&buff[buff_len], "{%d,%d,%d}{%d,%d,%d}=\n", a, b, x, c, d, y );
+
+  const int position_x = ( int ) ( ( a > x )
+                                   ? 0
+                                   : ( ( b < x )
+                                       ? ( LGGM_DBG_GET_INT_SQR_STR_WIDTH - 1 )
+                                       : (
+                                         ( a == b )
+                                         ? 0
+                                         : ( ( double ) ( x - a ) / ( double ) ( b - a ) * LGGM_DBG_GET_INT_SQR_STR_WIDTH )
+                                       )
+                                     )
+                                 );
+
+  const int position_y = ( int ) ( ( c > y )
+                                   ? 0
+                                   : ( ( d < y )
+                                       ? ( LGGM_DBG_GET_INT_SQR_STR_HEIGHT - 1 )
+                                       : (
+                                         ( c == d )
+                                         ? 0
+                                         : ( ( double ) ( y - c ) / ( double ) ( d - c ) * LGGM_DBG_GET_INT_SQR_STR_HEIGHT )
+                                       )
+                                     )
+                                 );
+
+  for ( int j = 0; j < LGGM_DBG_GET_INT_SQR_STR_WIDTH; ++j )
+  {
+    buff_len += sprintf (&buff[buff_len], "[" );
+
+    for ( int i = 0; i < LGGM_DBG_GET_INT_SQR_STR_WIDTH; ++i )
+    {
+      buff_len += sprintf (&buff[buff_len], ( ( i == position_x && j == position_y ) ? ( "*" ) : ( "-" ) ) );
+    }
+
+    buff_len += sprintf (&buff[buff_len], "]\n" );
+  }
+
+#else /*DBGPRN_ENABLED*/
+  ( void ) a;
+  ( void ) b;
+  ( void ) c;
+  ( void ) d;
+  ( void ) x;
+  ( void ) y;
+#endif /*DBGPRN_ENABLED*/
+  return buff;
+}
+
+#undef LGGM_DBG_GET_INT_SQR_STR_WIDTH
+#undef LGGM_DBG_GET_INT_SQR_STR_HEIGHT
+
+/*---------------------------------------------------------------------------*/
 
 #endif /* DBGPRN_C_INCLUDED */
