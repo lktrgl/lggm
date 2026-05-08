@@ -49,6 +49,9 @@ void doCLggmTest()
   LGGM_PRINT_HEX ( p1, sizeof ( n1 ) );
   LGGM_PRINT_HEX_C ( 1, p1, sizeof ( n1 ) );
 
+  LGGM_PRINT_IRUL (-2, 2, 0 );
+  LGGM_PRINT_IRUL_C ( 1, -2, 2, 0 );
+
   LGGM_CALL_OUT();
   LGGM_CALL_OUT_C ( 1 );
 }

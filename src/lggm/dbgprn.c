@@ -185,5 +185,45 @@ const char* lggmDbgVersion ( char* buffer, int buffer_len )
 }
 
 /*---------------------------------------------------------------------------*/
+#define LGGM_DBG_GET_INT_RULE_STR_WIDTH (15)
+#ifdef DBGPRN_HEADER_BASED_ENABLED
+  static inline
+#endif
+const char* lggmDbgGetIntRuleStr ( int a, int b, int x, char* buff )
+{
+#ifdef DBGPRN_ENABLED
+  size_t buff_len = 0;
+  buff_len += sprintf (&buff[buff_len], "{%d,%d,%d}=[", a, b, x );
+
+  const int position = ( int ) ( ( a > x )
+                                 ? 0
+                                 : ( ( b < x )
+                                     ? ( LGGM_DBG_GET_INT_RULE_STR_WIDTH - 1 )
+                                     : (
+                                       ( a == b )
+                                       ? 0
+                                       : ( ( double ) ( x - a ) / ( double ) ( b - a ) * LGGM_DBG_GET_INT_RULE_STR_WIDTH )
+                                     )
+                                   )
+                               );
+
+  for ( int i = 0; i < LGGM_DBG_GET_INT_RULE_STR_WIDTH; ++i )
+  {
+    buff_len += sprintf (&buff[buff_len], ( ( i == position ) ? ( "*" ) : ( "-" ) ) );
+  }
+
+  buff_len += sprintf (&buff[buff_len], "]" );
+
+#else /*DBGPRN_ENABLED*/
+  ( void ) a;
+  ( void ) b;
+  ( void ) x;
+#endif /*DBGPRN_ENABLED*/
+  return buff;
+}
+
+#undef LGGM_DBG_GET_INT_RULE_STR_WIDTH
+
+/*---------------------------------------------------------------------------*/
 
 #endif /* DBGPRN_C_INCLUDED */

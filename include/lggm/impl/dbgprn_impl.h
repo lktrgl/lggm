@@ -26,6 +26,8 @@ const char* lggmDbgGetHexStr ( const char* name, const char* ptr, int len, char*
 
 const char* lggmDbgVersion ( char* buffer, int buffer_len );
 
+const char* lggmDbgGetIntRuleStr ( int a, int b, int x, char* buff );
+
 #endif /*DBGPRN_HEADER_BASED_ENABLED*/
 
 /*---------------------------------------------------------------------------*/
