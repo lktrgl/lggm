@@ -80,11 +80,12 @@ void lggmDbgStdout ( const char* function, int line, const char* message )
 #ifdef DBGPRN_HEADER_BASED_ENABLED
   static inline
 #endif
-const char* lggmDbgGetStrInt ( const char* name, int val, char* buff )
+const char* lggmDbgGetStrInt ( const char* name, int val, char* buff, int buff_len )
 {
 #ifdef DBGPRN_ENABLED
-  sprintf ( buff, "%s=%d", name, val );
+  snprintf ( buff, buff_len, "%s=%d", name, val );
 #else /*DBGPRN_ENABLED*/
+  ( void ) buff_len;
   ( void ) name;
   ( void ) val;
 #endif /*DBGPRN_ENABLED*/
@@ -96,12 +97,17 @@ const char* lggmDbgGetStrInt ( const char* name, int val, char* buff )
 #ifdef DBGPRN_HEADER_BASED_ENABLED
   static inline
 #endif
-const char* lggmDbgGetStrStrN ( const char* name, const char* val, int len, char* buff )
+const char* lggmDbgGetStrStrN ( const char* name, const char* val, int len, char* buff, int buff_len )
 {
 #ifdef DBGPRN_ENABLED
   size_t first_len = 0;
-  sprintf ( buff, "%s='", name );
+  buff_len -= snprintf ( buff, buff_len, "%s='", name );
   first_len = strlen ( buff );
+
+  if ( buff_len < len )
+  {
+    len = buff_len;
+  }
 
   while ( len-- )
   {
@@ -111,6 +117,7 @@ const char* lggmDbgGetStrStrN ( const char* name, const char* val, int len, char
   * ( buff + first_len ) = 0x00;
   strcat ( buff, "'" );
 #else /*DBGPRN_ENABLED*/
+  ( void ) buff_len;
   ( void ) name;
   ( void ) val;
   ( void ) len;
@@ -123,11 +130,12 @@ const char* lggmDbgGetStrStrN ( const char* name, const char* val, int len, char
 #ifdef DBGPRN_HEADER_BASED_ENABLED
   static inline
 #endif
-const char* lggmDbgGetStrStr ( const char* name, const char* val, char* buff )
+const char* lggmDbgGetStrStr ( const char* name, const char* val, char* buff, int buff_len )
 {
 #ifdef DBGPRN_ENABLED
-  sprintf ( buff, "%s='%s'", name, val );
+  snprintf ( buff, buff_len, "%s='%s'", name, val );
 #else /*DBGPRN_ENABLED*/
+  ( void ) buff_len;
   ( void ) name;
   ( void ) val;
 #endif /*DBGPRN_ENABLED*/
@@ -139,22 +147,24 @@ const char* lggmDbgGetStrStr ( const char* name, const char* val, char* buff )
 #ifdef DBGPRN_HEADER_BASED_ENABLED
   static inline
 #endif
-const char* lggmDbgGetHexStr ( const char* name, const char* ptr, int len, char* buff )
+const char* lggmDbgGetHexStr ( const char* name, const char* ptr, int len, char* buff, int buff_len )
 {
 #ifdef DBGPRN_ENABLED
   int first_byte = 1;
-  size_t buff_len = 0;
-  buff_len += sprintf (&buff[buff_len], "%s='", name );
+  size_t buff_offs = 0;
+  buff_offs += snprintf (&buff[buff_offs], ( buff_len - buff_offs ), "%s='", name );
 
   for ( int i = 0; len; ++i, --len )
   {
-    buff_len += sprintf (&buff[buff_len], ( ( first_byte ) ? ( first_byte = 0, "%02X" ) : ( ":%02X" ) ),
-                         ( unsigned char ) ptr[i] );
+    buff_offs += snprintf (&buff[buff_offs], ( buff_len - buff_offs ), ( ( first_byte ) ? ( first_byte = 0,
+                           "%02X" ) : ( ":%02X" ) ),
+                           ( unsigned char ) ptr[i] );
   }
 
-  buff_len += sprintf (&buff[buff_len], "'" );
+  buff_offs += snprintf (&buff[buff_offs], ( buff_len - buff_offs ), "'" );
 
 #else /*DBGPRN_ENABLED*/
+  ( void ) buff_len;
   ( void ) name;
   ( void ) ptr;
   ( void ) len;
@@ -189,11 +199,11 @@ const char* lggmDbgVersion ( char* buffer, int buffer_len )
 #ifdef DBGPRN_HEADER_BASED_ENABLED
   static inline
 #endif
-const char* lggmDbgGetIntRuleStr ( int a, int b, int x, char* buff )
+const char* lggmDbgGetIntRuleStr ( int a, int b, int x, char* buff, int buff_len )
 {
 #ifdef DBGPRN_ENABLED
-  size_t buff_len = 0;
-  buff_len += sprintf (&buff[buff_len], "{%d,%d,%d}=[", a, b, x );
+  size_t buff_offs = 0;
+  buff_offs += snprintf (&buff[buff_offs], ( buff_len - buff_offs ), "{%d,%d,%d}=[", a, b, x );
 
   const int position = ( int ) ( ( a > x )
                                  ? 0
@@ -209,12 +219,13 @@ const char* lggmDbgGetIntRuleStr ( int a, int b, int x, char* buff )
 
   for ( int i = 0; i < LGGM_DBG_GET_INT_RULE_STR_WIDTH; ++i )
   {
-    buff_len += sprintf (&buff[buff_len], ( ( i == position ) ? ( "*" ) : ( "-" ) ) );
+    buff_offs += snprintf (&buff[buff_offs], ( buff_len - buff_offs ), ( ( i == position ) ? ( "*" ) : ( "-" ) ) );
   }
 
-  buff_len += sprintf (&buff[buff_len], "]" );
+  buff_offs += snprintf (&buff[buff_offs], ( buff_len - buff_offs ), "]" );
 
 #else /*DBGPRN_ENABLED*/
+  ( void ) buff_len;
   ( void ) a;
   ( void ) b;
   ( void ) x;
@@ -232,11 +243,11 @@ const char* lggmDbgGetIntRuleStr ( int a, int b, int x, char* buff )
 #ifdef DBGPRN_HEADER_BASED_ENABLED
   static inline
 #endif
-const char* lggmDbgGetIntSquareStr ( int a, int b, int c, int d, int x, int y, char* buff )
+const char* lggmDbgGetIntSquareStr ( int a, int b, int c, int d, int x, int y, char* buff, int buff_len )
 {
 #ifdef DBGPRN_ENABLED
-  size_t buff_len = 0;
-  buff_len += sprintf (&buff[buff_len], "{%d,%d,%d}{%d,%d,%d}=\n", a, b, x, c, d, y );
+  size_t buff_offs = 0;
+  buff_offs += snprintf (&buff[buff_offs], ( buff_len - buff_offs ), "{%d,%d,%d}{%d,%d,%d}=\n", a, b, x, c, d, y );
 
   const int position_x = ( int ) ( ( a > x )
                                    ? 0
@@ -264,17 +275,19 @@ const char* lggmDbgGetIntSquareStr ( int a, int b, int c, int d, int x, int y, c
 
   for ( int j = 0; j < LGGM_DBG_GET_INT_SQR_STR_WIDTH; ++j )
   {
-    buff_len += sprintf (&buff[buff_len], "[" );
+    buff_offs += snprintf (&buff[buff_offs], ( buff_len - buff_offs ), "[" );
 
     for ( int i = 0; i < LGGM_DBG_GET_INT_SQR_STR_WIDTH; ++i )
     {
-      buff_len += sprintf (&buff[buff_len], ( ( i == position_x && j == position_y ) ? ( "*" ) : ( "-" ) ) );
+      buff_offs += snprintf (&buff[buff_offs], ( buff_len - buff_offs ), ( ( i == position_x &&
+                             j == position_y ) ? ( "*" ) : ( "-" ) ) );
     }
 
-    buff_len += sprintf (&buff[buff_len], "]\n" );
+    buff_offs += snprintf (&buff[buff_offs], ( buff_len - buff_offs ), "]\n" );
   }
 
 #else /*DBGPRN_ENABLED*/
+  ( void ) buff_len;
   ( void ) a;
   ( void ) b;
   ( void ) c;
