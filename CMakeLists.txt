@@ -81,7 +81,7 @@ set_target_properties( lggm
      )
 
 if(NOT IS_SUBPROJECT)
-    add_executable ( lggm_test_cpp
+    add_executable ( lggm_test_cpp EXCLUDE_FROM_ALL
          ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp
          )
 
@@ -91,7 +91,7 @@ if(NOT IS_SUBPROJECT)
 endif()
 
 if(NOT IS_SUBPROJECT)
-    add_executable ( lggm_test_c
+    add_executable ( lggm_test_c EXCLUDE_FROM_ALL
          ${CMAKE_CURRENT_SOURCE_DIR}/src/main.c
          )
 
